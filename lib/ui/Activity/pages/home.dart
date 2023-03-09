@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomePage extends StatelessWidget {
+class HomeView extends StatelessWidget {
   final String userName = "Juan";
 
-  const HomePage({super.key}); // Aquí debes insertar el nombre del usuario
+  const HomeView({super.key}); // Aquí debes insertar el nombre del usuario
 
   @override
   Widget build(BuildContext context) {

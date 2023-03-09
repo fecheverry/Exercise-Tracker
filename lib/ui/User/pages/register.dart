@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class RegistroView extends StatelessWidget {
-  const RegistroView({super.key});
+class RegisterView extends StatelessWidget {
+  const RegisterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +13,12 @@ class RegistroView extends StatelessWidget {
         elevation: 0, //remover sombra
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          color: Colors.black,
+          color: Colors.amber[400],
           onPressed: () => Get.back(),
         ),
         title: const Text(
           'REGISTRO',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.amber),
         ),
       ),
       body: Padding(

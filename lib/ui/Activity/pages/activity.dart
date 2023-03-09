@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class CronometroPage extends StatefulWidget {
-  const CronometroPage({super.key});
+class ActivityView extends StatefulWidget {
+  const ActivityView({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _CronometroPageState createState() => _CronometroPageState();
+  _ActivityViewState createState() => _ActivityViewState();
 }
 
-class _CronometroPageState extends State<CronometroPage> {
+class _ActivityViewState extends State<ActivityView> {
   late Stopwatch _stopwatch;
   late Timer _timer;
   bool _isRunning = true;
@@ -99,18 +99,33 @@ class _CronometroPageState extends State<CronometroPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: _pauseResumeTimer,
-                  child: _isRunning
-                      ? const Icon(Icons.pause)
-                      : const Icon(Icons.play_arrow),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width / 2 - 10,
+                    child: ElevatedButton(
+                        onPressed: _pauseResumeTimer,
+                        child: _isRunning
+                            ? const Text(
+                                "PAUSAR",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center,
+                              )
+                            : const Text(
+                                "CONTINUAR",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center,
+                              ))),
+                const SizedBox(
+                  width: 1,
                 ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: _stopTimer,
-                  child: const Icon(Icons.stop),
-                ),
-                const SizedBox(height: 80)
+                SizedBox(
+                    width: MediaQuery.of(context).size.width / 2 - 10,
+                    child: ElevatedButton(
+                        onPressed: _stopTimer,
+                        child: const Text(
+                          "FINALIZAR",
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ))),
               ],
             ),
           ],
