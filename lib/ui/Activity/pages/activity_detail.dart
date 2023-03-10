@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ActivityDetail extends StatelessWidget {
-  final String tipoActividad;
-  final String duracion;
+class ActivityDetailView extends StatelessWidget {
 
-  ActivityDetail({
-    required this.tipoActividad,
-    required this.duracion,
+  const ActivityDetailView({
+    super.key,
   });
 
   @override
@@ -22,8 +19,9 @@ class ActivityDetail extends StatelessWidget {
           color: Colors.amber[400],
           onPressed: () => Get.back(),
         ),
+        // ignore: prefer_const_constructors
         title: Text(
-          tipoActividad,
+          "TROTE",
           style: const TextStyle(color: Colors.amber),
         ),
       ),
@@ -37,9 +35,11 @@ class ActivityDetail extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
+                // ignore: prefer_const_literals_to_create_immutables
                 children: [
+                  // ignore: prefer_const_constructors
                   Text(
-                    duracion,
+                    "00.00.00",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 24,

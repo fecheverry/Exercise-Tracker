@@ -1,3 +1,4 @@
+import 'package:exercise_tracker/ui/Segment/pages/segment_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -118,8 +119,7 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        DetalleSegmentoView(segmento: segmento),
+                    builder: (context) => SegmentDetailView(),
                   ),
                 );
               },
@@ -131,30 +131,9 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
         onPressed: () {
           // Acción del botón flotante
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
-  }
-}
-
-class DetalleSegmentoView extends StatelessWidget {
-  final Segmento segmento;
-
-  const DetalleSegmentoView({Key? key, required this.segmento})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detalle actividad'),
-      ),
-      body: Center(
-        child: Text(
-          'Nombre: ${segmento.name}\nInicia en: ${segmento.start}\nTermina en: ${segmento.end}',
-        ),
-      ),
     );
   }
 }

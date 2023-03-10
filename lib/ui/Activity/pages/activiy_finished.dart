@@ -79,13 +79,10 @@ class ActivyFinishedView extends StatelessWidget {
       'ranking': '4° de 9',
     },
   ];
-  final String tipoActividad;
-  final String duracion;
+
 
   ActivyFinishedView({
     super.key,
-    required this.tipoActividad,
-    required this.duracion,
   });
 
   @override
@@ -111,6 +108,7 @@ class ActivyFinishedView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              // ignore: prefer_const_literals_to_create_immutables
               children: [
                 const Text(
                   "Duracion",
@@ -120,8 +118,9 @@ class ActivyFinishedView extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
+                // ignore: prefer_const_constructors
                 Text(
-                  duracion,
+                  "00.00.00",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 30,

@@ -9,6 +9,7 @@ import 'Activity/pages/activiy_finished.dart';
 import 'Activity/pages/activity_history.dart';
 import 'Segment/pages/segment_history.dart';
 import 'Segment/pages/segment_detail.dart';
+import 'Segment/pages/segment_create.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -22,13 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      home: SegmentDetailView(
-        segmentName: "SEGMENTO 1",
-        bestTime: "00.00.00",
-        avgTime: "00.00.00",
-        start: "CRA1",
-        end: "CRA 2",
-      ),
+      home: SegmentHistoryView(),
     );
   }
 }

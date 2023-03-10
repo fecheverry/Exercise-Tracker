@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SegmentDetailView extends StatelessWidget {
-  final String segmentName;
-  final String bestTime;
-  final String avgTime;
-  final String start;
-  final String end;
-
   SegmentDetailView({
     super.key,
-    required this.segmentName,
-    required this.bestTime,
-    required this.avgTime,
-    required this.start,
-    required this.end,
   });
 
   final List<Map<String, String>> _rankingData = [
+    {"rank": "1", "name": "John Doe", "time": "2:45:12"},
+    {"rank": "2", "name": "Jane Smith", "time": "3:01:45"},
+    {"rank": "3", "name": "Bob Johnson", "time": "3:05:22"},
+    {"rank": "4", "name": "Emily Brown", "time": "3:10:11"},
+    {"rank": "5", "name": "Mike Wilson", "time": "3:15:00"},
+    {"rank": "1", "name": "John Doe", "time": "2:45:12"},
+    {"rank": "2", "name": "Jane Smith", "time": "3:01:45"},
+    {"rank": "3", "name": "Bob Johnson", "time": "3:05:22"},
+    {"rank": "4", "name": "Emily Brown", "time": "3:10:11"},
+    {"rank": "5", "name": "Mike Wilson", "time": "3:15:00"},
     {"rank": "1", "name": "John Doe", "time": "2:45:12"},
     {"rank": "2", "name": "Jane Smith", "time": "3:01:45"},
     {"rank": "3", "name": "Bob Johnson", "time": "3:05:22"},
@@ -37,8 +36,9 @@ class SegmentDetailView extends StatelessWidget {
           color: Colors.amber[400],
           onPressed: () => Get.back(),
         ),
+        // ignore: prefer_const_constructors
         title: Text(
-          segmentName,
+          "SEGMENTO 1",
           style: const TextStyle(color: Colors.amber),
         ),
       ),
@@ -54,9 +54,11 @@ class SegmentDetailView extends StatelessWidget {
                   Row(
                     children: [
                       Column(
+                        // ignore: prefer_const_literals_to_create_immutables
                         children: [
+                          // ignore: prefer_const_constructors
                           Text(
-                            bestTime,
+                            "00.00.00",
                             style: const TextStyle(fontSize: 24.0),
                           ),
                           const Text(
@@ -67,9 +69,11 @@ class SegmentDetailView extends StatelessWidget {
                       ),
                       const Spacer(),
                       Column(
+                        // ignore: prefer_const_literals_to_create_immutables
                         children: [
+                          // ignore: prefer_const_constructors
                           Text(
-                            avgTime,
+                            "00.00.00",
                             style: const TextStyle(fontSize: 24.0),
                           ),
                           const Text(
@@ -90,8 +94,9 @@ class SegmentDetailView extends StatelessWidget {
                       const SizedBox(
                         width: 5,
                       ),
+                      // ignore: prefer_const_constructors
                       Text(
-                        start,
+                        "CRA 72 # 88-61",
                         style: const TextStyle(fontSize: 24.0),
                       ),
                     ],
@@ -106,8 +111,9 @@ class SegmentDetailView extends StatelessWidget {
                       const SizedBox(
                         width: 5,
                       ),
+                      // ignore: prefer_const_constructors
                       Text(
-                        end,
+                        "CRA 41 # 59-36",
                         style: const TextStyle(fontSize: 24.0),
                       ),
                     ],

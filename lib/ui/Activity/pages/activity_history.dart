@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'activity_detail.dart';
 
 class ActivityHistoryView extends StatefulWidget {
   const ActivityHistoryView({super.key});
@@ -25,7 +26,8 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
       fecha: DateTime.now().subtract(const Duration(days: 2)),
       duracion: const Duration(hours: 0, minutes: 45, seconds: 20),
       recorrido: "3.1",
-    ),   Actividad(
+    ),
+    Actividad(
       fecha: DateTime.now(),
       duracion: const Duration(hours: 1, minutes: 30, seconds: 45),
       recorrido: "10.5",
@@ -39,7 +41,8 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
       fecha: DateTime.now().subtract(const Duration(days: 2)),
       duracion: const Duration(hours: 0, minutes: 45, seconds: 20),
       recorrido: "3.1",
-    ),   Actividad(
+    ),
+    Actividad(
       fecha: DateTime.now(),
       duracion: const Duration(hours: 1, minutes: 30, seconds: 45),
       recorrido: "10.5",
@@ -53,7 +56,8 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
       fecha: DateTime.now().subtract(const Duration(days: 2)),
       duracion: const Duration(hours: 0, minutes: 45, seconds: 20),
       recorrido: "3.1",
-    ),   Actividad(
+    ),
+    Actividad(
       fecha: DateTime.now(),
       duracion: const Duration(hours: 1, minutes: 30, seconds: 45),
       recorrido: "10.5",
@@ -89,7 +93,7 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
       ),
       body: ListView.separated(
         itemCount: _actividades.length,
-        separatorBuilder: (BuildContext context, int index) => Divider(),
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
         itemBuilder: (BuildContext context, int index) {
           final actividad = _actividades[index];
           return Dismissible(
@@ -115,35 +119,13 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        DetalleActividadView(actividad: actividad),
+                    builder: (context) => ActivityDetailView(),
                   ),
                 );
               },
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class DetalleActividadView extends StatelessWidget {
-  final Actividad actividad;
-
-  const DetalleActividadView({Key? key, required this.actividad})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detalle actividad'),
-      ),
-      body: Center(
-        child: Text(
-          'Fecha: ${actividad.fecha}\nDuración: ${actividad.duracion}\nRecorrido: ${actividad.recorrido}',
-        ),
       ),
     );
   }
