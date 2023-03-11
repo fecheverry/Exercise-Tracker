@@ -1,3 +1,4 @@
+import 'package:exercise_tracker/ui/Segment/pages/segment_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -51,9 +52,9 @@ class SegmentCreationView extends StatelessWidget {
             ),
             const Spacer(),
             ElevatedButton(
-              onPressed: () {
-                // Código para crear el segmento
-              },
+               onPressed: () {
+                  Get.to(() => const SegmentHistoryView());
+                },
               child: const Text('CREAR SEGMENTO'),
             ),
           ],

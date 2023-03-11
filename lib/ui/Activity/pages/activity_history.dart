@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../Segment/pages/segment_history.dart';
 import 'activity_detail.dart';
+import 'home.dart';
 
 class ActivityHistoryView extends StatefulWidget {
   const ActivityHistoryView({super.key});
@@ -84,7 +86,9 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           color: Colors.amber[400],
-          onPressed: () => Get.back(),
+          onPressed: () {
+            Get.to(() => const HomeView());
+          },
         ),
         title: const Text(
           'ACTIVIDADES',
@@ -126,6 +130,32 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
             ),
           );
         },
+      ),      bottomNavigationBar: BottomNavigationBar( backgroundColor: Colors.white,
+        currentIndex: 0,
+        onTap: (index) {
+          if (index == 1) {
+              Get.to(() => const HomeView());
+          }
+          if (index == 2) {
+              Get.to(() => const SegmentHistoryView());
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.directions_run,
+            ),
+            label: "",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.watch_later),
+            label: "",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.segment),
+            label: "",
+          ),
+        ],
       ),
     );
   }

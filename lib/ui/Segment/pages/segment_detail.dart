@@ -149,12 +149,6 @@ class SegmentDetailView extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Agregar acción aquí
-        },
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

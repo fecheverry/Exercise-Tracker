@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'activity_history.dart';
 
 class ActivyFinishedView extends StatelessWidget {
   final List<Map<String, String>> segmentos = [
@@ -80,7 +81,6 @@ class ActivyFinishedView extends StatelessWidget {
     },
   ];
 
-
   ActivyFinishedView({
     super.key,
   });
@@ -95,7 +95,9 @@ class ActivyFinishedView extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.save_alt),
           color: Colors.amber[400],
-          onPressed: () => Get.back(),
+          onPressed: () {
+            Get.to(() => const ActivityHistoryView());
+          },
         ),
         title: const Text(
           'GUARDAR',

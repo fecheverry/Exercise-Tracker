@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../Activity/pages/home.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(  backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -21,20 +22,20 @@ class LoginView extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               const Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.symmetric(horizontal: 24),
                 child: TextField(
                   keyboardType: TextInputType.emailAddress,
-                  decoration:  InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Correo electrónico',
                   ),
                 ),
               ),
               const SizedBox(height: 12),
               const Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.symmetric(horizontal: 24),
                 child: TextField(
                   obscureText: true,
-                  decoration:  InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Contraseña',
                   ),
                 ),
@@ -42,8 +43,7 @@ class LoginView extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
-                  // Aquí puedes agregar la lógica para hacer el inicio de sesión
-                  // utilizando los valores de los controladores emailController y passwordController
+                  Get.to(() => const HomeView());
                 },
                 child: const Text('LOG IN'),
               ),

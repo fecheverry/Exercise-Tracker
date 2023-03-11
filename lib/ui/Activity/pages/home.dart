@@ -1,5 +1,8 @@
+import 'package:exercise_tracker/ui/Activity/pages/activity_history.dart';
+import 'package:exercise_tracker/ui/Segment/pages/segment_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'activity.dart';
 
 class HomeView extends StatelessWidget {
   final String userName = "Juan";
@@ -9,7 +12,8 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+       backgroundColor: Colors.white,
+      body:  Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -30,7 +34,7 @@ class HomeView extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
-                  // aquí debes agregar la lógica que se ejecutará al presionar el botón
+                  Get.to(() => const ActivityView());
                 },
                 icon: const Icon(Icons.directions_bike),
                 color: Colors.amber, // cambia el color del icono
@@ -39,7 +43,7 @@ class HomeView extends StatelessWidget {
               const SizedBox(width: 120),
               IconButton(
                 onPressed: () {
-                  // aquí debes agregar la lógica que se ejecutará al presionar el botón
+                  Get.to(() => const ActivityView());
                 },
                 icon: const Icon(Icons.directions_run),
                 color: Colors.amber, // cambia el color del icono
@@ -49,14 +53,21 @@ class HomeView extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar( backgroundColor: Colors.white,
         currentIndex: 1,
         onTap: (index) {
-          // aquí debes agregar la lógica para manejar los cambios de pantalla
+          if (index == 0) {
+              Get.to(() => const ActivityHistoryView());
+          }
+          if (index == 2) {
+              Get.to(() => const SegmentHistoryView());
+          }
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.directions_run),
+            icon: Icon(
+              Icons.directions_run,
+            ),
             label: "",
           ),
           BottomNavigationBarItem(

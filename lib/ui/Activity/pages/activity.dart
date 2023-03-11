@@ -1,6 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'activiy_finished.dart';
 
 class ActivityView extends StatefulWidget {
   const ActivityView({super.key});
@@ -70,7 +71,7 @@ class _ActivityViewState extends State<ActivityView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -120,7 +121,10 @@ class _ActivityViewState extends State<ActivityView> {
                 SizedBox(
                     width: MediaQuery.of(context).size.width / 2 - 10,
                     child: ElevatedButton(
-                        onPressed: _stopTimer,
+                        onPressed: () {
+                          _stopTimer();
+                          Get.to(() => ActivyFinishedView());
+                        },
                         child: const Text(
                           "FINALIZAR",
                           style: TextStyle(fontSize: 20),
