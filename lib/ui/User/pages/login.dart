@@ -1,13 +1,22 @@
+import 'package:exercise_tracker/ui/User/controllers/user_controller.dart';
+import 'package:exercise_tracker/ui/User/pages/register.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../Activity/pages/home.dart';
 
+// ignore: must_be_immutable
 class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+  final UserController _userController = Get.find();
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(  backgroundColor: Colors.white,
+    return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -21,21 +30,23 @@ class LoginView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: TextField(
+                  controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Correo electrónico',
                   ),
                 ),
               ),
               const SizedBox(height: 12),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: TextField(
+                  controller: _passwordController,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Contraseña',
                   ),
                 ),
@@ -43,7 +54,8 @@ class LoginView extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
-                  Get.to(() => const HomeView());
+                  _userController.login(
+                      _emailController.text, _passwordController.text);
                 },
                 child: const Text('LOG IN'),
               ),
@@ -65,6 +77,10 @@ class LoginView extends StatelessWidget {
                           color: Colors.amber[400],
                           fontWeight: FontWeight.bold,
                         ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Get.to(() =>  RegisterView());
+                          },
                       ),
                     ],
                   ),

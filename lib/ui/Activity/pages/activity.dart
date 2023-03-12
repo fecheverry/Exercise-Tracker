@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'package:exercise_tracker/ui/Activity/controllers/activity_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../User/controllers/user_controller.dart';
 import 'activiy_finished.dart';
 
 class ActivityView extends StatefulWidget {
-  const ActivityView({super.key});
+  final String type;
+  const ActivityView({super.key, required this.type});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -12,6 +15,9 @@ class ActivityView extends StatefulWidget {
 }
 
 class _ActivityViewState extends State<ActivityView> {
+  final UserController _userController = Get.find();
+  final ActivityController _activityController = Get.find();
+
   late Stopwatch _stopwatch;
   late Timer _timer;
   bool _isRunning = true;
@@ -71,7 +77,8 @@ class _ActivityViewState extends State<ActivityView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( backgroundColor: Colors.white,
+    return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -122,8 +129,13 @@ class _ActivityViewState extends State<ActivityView> {
                     width: MediaQuery.of(context).size.width / 2 - 10,
                     child: ElevatedButton(
                         onPressed: () {
+                          _activityController.addActivity(
+                              _userController.userInfo!.id,
+                              _formattedTime(_stopwatch.elapsed),
+                              "00.0",
+                              DateTime.now().toString(),
+                              widget.type);
                           _stopTimer();
-                          Get.to(() => ActivyFinishedView());
                         },
                         child: const Text(
                           "FINALIZAR",

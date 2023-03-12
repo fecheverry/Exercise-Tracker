@@ -1,6 +1,9 @@
+import 'package:exercise_tracker/ui/Activity/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Segment/pages/segment_history.dart';
+import '../../User/controllers/user_controller.dart';
+import '../controllers/activity_controller.dart';
 import 'activity_detail.dart';
 import 'home.dart';
 
@@ -13,68 +16,8 @@ class ActivityHistoryView extends StatefulWidget {
 }
 
 class _ActivityHistoryViewState extends State<ActivityHistoryView> {
-  final List<Actividad> _actividades = [
-    Actividad(
-      fecha: DateTime.now(),
-      duracion: const Duration(hours: 1, minutes: 30, seconds: 45),
-      recorrido: "10.5",
-    ),
-    Actividad(
-      fecha: DateTime.now().subtract(const Duration(days: 1)),
-      duracion: const Duration(hours: 2, minutes: 0, seconds: 15),
-      recorrido: "7.2",
-    ),
-    Actividad(
-      fecha: DateTime.now().subtract(const Duration(days: 2)),
-      duracion: const Duration(hours: 0, minutes: 45, seconds: 20),
-      recorrido: "3.1",
-    ),
-    Actividad(
-      fecha: DateTime.now(),
-      duracion: const Duration(hours: 1, minutes: 30, seconds: 45),
-      recorrido: "10.5",
-    ),
-    Actividad(
-      fecha: DateTime.now().subtract(const Duration(days: 1)),
-      duracion: const Duration(hours: 2, minutes: 0, seconds: 15),
-      recorrido: "7.2",
-    ),
-    Actividad(
-      fecha: DateTime.now().subtract(const Duration(days: 2)),
-      duracion: const Duration(hours: 0, minutes: 45, seconds: 20),
-      recorrido: "3.1",
-    ),
-    Actividad(
-      fecha: DateTime.now(),
-      duracion: const Duration(hours: 1, minutes: 30, seconds: 45),
-      recorrido: "10.5",
-    ),
-    Actividad(
-      fecha: DateTime.now().subtract(const Duration(days: 1)),
-      duracion: const Duration(hours: 2, minutes: 0, seconds: 15),
-      recorrido: "7.2",
-    ),
-    Actividad(
-      fecha: DateTime.now().subtract(const Duration(days: 2)),
-      duracion: const Duration(hours: 0, minutes: 45, seconds: 20),
-      recorrido: "3.1",
-    ),
-    Actividad(
-      fecha: DateTime.now(),
-      duracion: const Duration(hours: 1, minutes: 30, seconds: 45),
-      recorrido: "10.5",
-    ),
-    Actividad(
-      fecha: DateTime.now().subtract(const Duration(days: 1)),
-      duracion: const Duration(hours: 2, minutes: 0, seconds: 15),
-      recorrido: "7.2",
-    ),
-    Actividad(
-      fecha: DateTime.now().subtract(const Duration(days: 2)),
-      duracion: const Duration(hours: 0, minutes: 45, seconds: 20),
-      recorrido: "3.1",
-    ),
-  ];
+  final UserController _userController = Get.find();
+  final ActivityController _activityController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +30,7 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
           icon: const Icon(Icons.arrow_back),
           color: Colors.amber[400],
           onPressed: () {
-            Get.to(() => const HomeView());
+            Get.to(() => HomeView());
           },
         ),
         title: const Text(
@@ -96,15 +39,15 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
         ),
       ),
       body: ListView.separated(
-        itemCount: _actividades.length,
+        itemCount: _activityController.listActivities.length,
         separatorBuilder: (BuildContext context, int index) => const Divider(),
         itemBuilder: (BuildContext context, int index) {
-          final actividad = _actividades[index];
+          final actividad = _activityController.listActivities[index];
           return Dismissible(
             key: UniqueKey(),
             onDismissed: (direction) {
               setState(() {
-                _actividades.removeAt(index);
+                _activityController.listActivities.removeAt(index);
               });
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -115,29 +58,32 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
             },
             background: Container(color: Colors.red),
             child: ListTile(
-              title: Text(actividad.fecha.toString()),
+              title: Text(actividad.date),
               subtitle: Text(
-                'Duración: ${actividad.duracion.inHours}h ${actividad.duracion.inMinutes % 60}m ${actividad.duracion.inSeconds % 60}s, \nRecorrido: ${actividad.recorrido}',
+                'Duración: ${actividad.duration}',
               ),
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ActivityDetailView(),
+                    builder: (context) =>
+                        ActivityDetailView(actividad: actividad),
                   ),
                 );
               },
             ),
           );
         },
-      ),      bottomNavigationBar: BottomNavigationBar( backgroundColor: Colors.white,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         currentIndex: 0,
         onTap: (index) {
           if (index == 1) {
-              Get.to(() => const HomeView());
+            Get.to(() => HomeView());
           }
           if (index == 2) {
-              Get.to(() => const SegmentHistoryView());
+            Get.to(() => const SegmentHistoryView());
           }
         },
         items: const [
@@ -159,13 +105,4 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
       ),
     );
   }
-}
-
-class Actividad {
-  final DateTime fecha;
-  final Duration duracion;
-  final String recorrido;
-
-  Actividad(
-      {required this.fecha, required this.duracion, required this.recorrido});
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ActivityDetailView extends StatelessWidget {
+import '../models/activity_model.dart';
 
-  const ActivityDetailView({
-    super.key,
-  });
+class ActivityDetailView extends StatelessWidget {
+  final Activity actividad;
+
+  // ignore: empty_constructor_bodies
+  ActivityDetailView({super.key, required this.actividad}) {}
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class ActivityDetailView extends StatelessWidget {
         ),
         // ignore: prefer_const_constructors
         title: Text(
-          "TROTE",
+          actividad.type,
           style: const TextStyle(color: Colors.amber),
         ),
       ),
@@ -39,7 +41,7 @@ class ActivityDetailView extends StatelessWidget {
                 children: [
                   // ignore: prefer_const_constructors
                   Text(
-                    "00.00.00",
+                    actividad.duration,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 24,
@@ -59,16 +61,16 @@ class ActivityDetailView extends StatelessWidget {
                 width: 150,
               ),
               Column(
-                children: const [
+                children: [
                   Text(
-                    "0.00",
+                    actividad.distance,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
+                  const Text(
                     "Recorrido",
                     textAlign: TextAlign.center,
                     style: TextStyle(

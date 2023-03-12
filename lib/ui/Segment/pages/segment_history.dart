@@ -91,7 +91,7 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
           icon: const Icon(Icons.arrow_back),
           color: Colors.amber[400],
           onPressed: () {
-            Get.to(() => const HomeView());
+            Get.to(() =>  HomeView());
           },
         ),
         title: const Text(
@@ -151,7 +151,7 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
             Get.to(() => const ActivityHistoryView());
           }
           if (index == 1) {
-            Get.to(() => const HomeView());
+            Get.to(() =>  HomeView());
           }
         },
         items: const [

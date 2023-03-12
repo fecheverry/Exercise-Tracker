@@ -1,8 +1,18 @@
+import 'package:exercise_tracker/ui/Activity/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controllers/user_controller.dart';
+
 class RegisterView extends StatelessWidget {
-  const RegisterView({super.key});
+  final UserController _userController = Get.find();
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+
+  RegisterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +38,22 @@ class RegisterView extends StatelessWidget {
           children: [
             const Spacer(),
             TextFormField(
+              controller: _nameController,
               decoration: const InputDecoration(hintText: 'Nombre'),
             ),
             const SizedBox(height: 16),
             TextFormField(
+              controller: _lastNameController,
               decoration: const InputDecoration(hintText: 'Apellido'),
             ),
             const SizedBox(height: 16),
             TextFormField(
+              controller: _emailController,
               decoration: const InputDecoration(hintText: 'Correo'),
             ),
             const SizedBox(height: 16),
             TextFormField(
+              controller: _passwordController,
               decoration: const InputDecoration(hintText: 'Contraseña'),
               obscureText: true,
             ),
@@ -47,7 +61,13 @@ class RegisterView extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  _userController.register(
+                      _nameController.text,
+                      _lastNameController.text,
+                      _emailController.text,
+                      _passwordController.text);
+                },
                 child: const Text('CREAR CUENTA'),
               ),
             ),
