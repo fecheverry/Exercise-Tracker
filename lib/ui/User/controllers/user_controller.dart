@@ -54,6 +54,7 @@ class UserController extends GetxController {
   }
 
   void register(String name, String lastName, String email, String password) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     int sw = 1;
     for (User elem in _users) {
       if (elem.email == email) {
@@ -63,7 +64,7 @@ class UserController extends GetxController {
     }
 
     if (sw == 1) {
-      User userToAdd = User(
+      if (emailRegex.hasMatch(email)) {      User userToAdd = User(
           id: (_users.length + 1).toString(),
           name: name,
           lastName: lastName,
@@ -72,6 +73,12 @@ class UserController extends GetxController {
       _users.add(userToAdd);
       user.value = userToAdd;
       Get.to(() => HomeView());
+  // El texto es una dirección de correo electrónico válida
+} else {
+    Get.snackbar('Error', 'Digite una direccion de correo valida');
+  // El texto no es una dirección de correo electrónico válida
+}
+
     } else {
       Get.snackbar('Error', 'Este correo ya se encuentra registrado');
     }

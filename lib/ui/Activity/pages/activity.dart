@@ -109,11 +109,9 @@ class _ActivityViewState extends State<ActivityView> {
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const Spacer(),
           SizedBox(
-            height: 400, // Altura del mapa
+            height: MediaQuery.of(context).size.height / 2, // Altura del mapa
             child: GoogleMap(
               mapType: MapType.normal,
               initialCameraPosition: const CameraPosition(
@@ -125,7 +123,6 @@ class _ActivityViewState extends State<ActivityView> {
               },
             ),
           ),
-          const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
