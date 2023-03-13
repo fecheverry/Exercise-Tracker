@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../User/controllers/user_controller.dart';
 import 'activiy_finished.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter/material.dart';
 
 class ActivityView extends StatefulWidget {
   final String type;
@@ -75,77 +78,96 @@ class _ActivityViewState extends State<ActivityView> {
     return "0$n";
   }
 
+  late GoogleMapController _mapController;
+  late Position _currentPosition;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
-            Text(
-              _formattedTime(_stopwatch.elapsed),
-              style: const TextStyle(fontSize: 65),
+      /*appBar: AppBar(
+        title: const Text('Mapa'),
+      ),*/
+      body: ListView(
+        children: [
+          SizedBox(
+            height: 400, // Altura del mapa
+            child: GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(37.77483, -122.41942),
+                zoom: 12,
+              ),
+              onMapCreated: (GoogleMapController controller) {
+                _mapController = controller;
+              },
             ),
-            const Text(
-              "Duracion",
-              style: TextStyle(fontSize: 20),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              "0.00",
-              style: TextStyle(fontSize: 65),
-            ),
-            const Text(
-              "Distancia",
-              style: TextStyle(fontSize: 20),
-              textAlign: TextAlign.center,
-            ),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                    width: MediaQuery.of(context).size.width / 2 - 10,
-                    child: ElevatedButton(
-                        onPressed: _pauseResumeTimer,
-                        child: _isRunning
-                            ? const Text(
-                                "PAUSAR",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center,
-                              )
-                            : const Text(
-                                "CONTINUAR",
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ))),
-                const SizedBox(
-                  width: 1,
-                ),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width / 2 - 10,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          _activityController.addActivity(
-                              _userController.userInfo!.id,
-                              _formattedTime(_stopwatch.elapsed),
-                              "00.0",
-                              DateTime.now().toString(),
-                              widget.type);
-                          _stopTimer();
-                        },
-                        child: const Text(
-                          "FINALIZAR",
+          ),
+          const SizedBox(height: 20),
+          Text(
+            _formattedTime(_stopwatch.elapsed),
+            style: const TextStyle(fontSize: 65),
+          ),
+          const Text(
+            "Duracion",
+            style: TextStyle(fontSize: 20),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            "0.00",
+            style: TextStyle(fontSize: 65),
+          ),
+          const Text(
+            "Distancia",
+            style: TextStyle(fontSize: 20),
+            textAlign: TextAlign.center,
+          ),
+          const Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2 - 10,
+                child: ElevatedButton(
+                  onPressed: _pauseResumeTimer,
+                  child: _isRunning
+                      ? const Text(
+                          "PAUSAR",
                           style: TextStyle(fontSize: 20),
                           textAlign: TextAlign.center,
-                        ))),
-              ],
-            ),
-          ],
-        ),
+                        )
+                      : const Text(
+                          "CONTINUAR",
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ),
+                ),
+              ),
+              const SizedBox(
+                width: 1,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2 - 10,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _activityController.addActivity(
+                        _userController.userInfo!.id,
+                        _formattedTime(_stopwatch.elapsed),
+                        "00.0",
+                        DateTime.now().toString(),
+                        widget.type);
+                    _stopTimer();
+                  },
+                  child: const Text(
+                    "FINALIZAR",
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
