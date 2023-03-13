@@ -87,22 +87,9 @@ class _ActivityViewState extends State<ActivityView> {
       /*appBar: AppBar(
         title: const Text('Mapa'),
       ),*/
-      body: ListView(
+      body: Column(
         children: [
-          SizedBox(
-            height: 400, // Altura del mapa
-            child: GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(37.77483, -122.41942),
-                zoom: 12,
-              ),
-              onMapCreated: (GoogleMapController controller) {
-                _mapController = controller;
-              },
-            ),
-          ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 40),
           Text(
             _formattedTime(_stopwatch.elapsed),
             style: const TextStyle(fontSize: 65),
@@ -121,6 +108,22 @@ class _ActivityViewState extends State<ActivityView> {
             "Distancia",
             style: TextStyle(fontSize: 20),
             textAlign: TextAlign.center,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            height: 400, // Altura del mapa
+            child: GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(11.019211, -74.850314),
+                zoom: 15,
+              ),
+              onMapCreated: (GoogleMapController controller) {
+                _mapController = controller;
+              },
+            ),
           ),
           const Spacer(),
           Row(
