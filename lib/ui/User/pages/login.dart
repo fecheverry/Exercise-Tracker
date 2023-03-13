@@ -79,7 +79,7 @@ class LoginView extends StatelessWidget {
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            Get.to(() =>  RegisterView());
+                            Get.to(() => RegisterView());
                           },
                       ),
                     ],
