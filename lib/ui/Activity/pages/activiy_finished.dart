@@ -1,89 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../models/activity_model.dart';
 import 'activity_history.dart';
 
-class ActivyFinishedView extends StatelessWidget {
-  final List<Map<String, String>> segmentos = [
-    {
-      'nombre': 'Segmento 1',
-      'tiempo': '1:23',
-      'ranking': '1° de 10',
-    },
-    {
-      'nombre': 'Segmento 2',
-      'tiempo': '2:45',
-      'ranking': '3° de 12',
-    },
-    {
-      'nombre': 'Segmento 3',
-      'tiempo': '0:59',
-      'ranking': '5° de 8',
-    },
-    {
-      'nombre': 'Segmento 4',
-      'tiempo': '1:36',
-      'ranking': '2° de 6',
-    },
-    {
-      'nombre': 'Segmento 5',
-      'tiempo': '2:12',
-      'ranking': '4° de 9',
-    },
-    {
-      'nombre': 'Segmento 1',
-      'tiempo': '1:23',
-      'ranking': '1° de 10',
-    },
-    {
-      'nombre': 'Segmento 2',
-      'tiempo': '2:45',
-      'ranking': '3° de 12',
-    },
-    {
-      'nombre': 'Segmento 3',
-      'tiempo': '0:59',
-      'ranking': '5° de 8',
-    },
-    {
-      'nombre': 'Segmento 4',
-      'tiempo': '1:36',
-      'ranking': '2° de 6',
-    },
-    {
-      'nombre': 'Segmento 5',
-      'tiempo': '2:12',
-      'ranking': '4° de 9',
-    },
-    {
-      'nombre': 'Segmento 1',
-      'tiempo': '1:23',
-      'ranking': '1° de 10',
-    },
-    {
-      'nombre': 'Segmento 2',
-      'tiempo': '2:45',
-      'ranking': '3° de 12',
-    },
-    {
-      'nombre': 'Segmento 3',
-      'tiempo': '0:59',
-      'ranking': '5° de 8',
-    },
-    {
-      'nombre': 'Segmento 4',
-      'tiempo': '1:36',
-      'ranking': '2° de 6',
-    },
-    {
-      'nombre': 'Segmento 5',
-      'tiempo': '2:12',
-      'ranking': '4° de 9',
-    },
-  ];
-
-  ActivyFinishedView({
-    super.key,
-  });
+class ActivityFinishedView extends StatelessWidget {
+  final Activity activity;
+  const ActivityFinishedView({super.key, required this.activity});
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +44,7 @@ class ActivyFinishedView extends StatelessWidget {
                 const Spacer(),
                 // ignore: prefer_const_constructors
                 Text(
-                  "00.00.00",
+                  activity.duration,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 30,
@@ -138,16 +60,16 @@ class ActivyFinishedView extends StatelessWidget {
               height: 20,
             ),
             Row(
-              children: const [
+              children:  [
                 Text(
-                  "Distancia",
+                  activity.distance,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 30,
                   ),
                 ),
-                Spacer(),
-                Text(
+                const Spacer(),
+                const Text(
                   "0.00",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -155,7 +77,7 @@ class ActivyFinishedView extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 60,
                 ),
               ],
@@ -172,7 +94,7 @@ class ActivyFinishedView extends StatelessWidget {
                   color: Colors.grey,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
                     'SEGMENTOS',
                     style: TextStyle(
@@ -189,7 +111,7 @@ class ActivyFinishedView extends StatelessWidget {
                 ),
               ],
             ),
-            Expanded(
+            /*Expanded(
               child: ListView.builder(
                 itemCount: segmentos.length,
                 itemBuilder: (context, index) {
@@ -206,7 +128,7 @@ class ActivyFinishedView extends StatelessWidget {
                   );
                 },
               ),
-            )
+            )*/
           ],
         ),
       ),
