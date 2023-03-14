@@ -35,13 +35,12 @@ class HomeView extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
-                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        ActivityView(type: "BICICLETA"),
-                  ),
-                );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ActivityView(type: "BICICLETA"),
+                    ),
+                  );
                 },
                 icon: const Icon(Icons.directions_bike),
                 color: Colors.amber, // cambia el color del icono
@@ -51,12 +50,11 @@ class HomeView extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        ActivityView(type: "TROTE"),
-                  ),
-                );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ActivityView(type: "TROTE"),
+                    ),
+                  );
                 },
                 icon: const Icon(Icons.directions_run),
                 color: Colors.amber, // cambia el color del icono
@@ -67,7 +65,9 @@ class HomeView extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue, // color de fondo del BottomNavigationBar
+        selectedItemColor: Colors.amber, // color de los elementos seleccionados
+        unselectedItemColor: Colors.grey,
         currentIndex: 1,
         onTap: (index) {
           if (index == 0) {
@@ -75,6 +75,30 @@ class HomeView extends StatelessWidget {
           }
           if (index == 2) {
             Get.to(() => const SegmentHistoryView());
+          }
+          if (index == 3) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('¿Está seguro desea cerrar la sesion?'),
+                    actions: [
+                      TextButton(
+                        child: const Text('Cancelar'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Sí'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          _userController.logout();
+                        },
+                      ),
+                    ],
+                  );
+                });
           }
         },
         items: const [
@@ -90,6 +114,12 @@ class HomeView extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.segment),
+            label: "",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.logout,
+            ),
             label: "",
           ),
         ],

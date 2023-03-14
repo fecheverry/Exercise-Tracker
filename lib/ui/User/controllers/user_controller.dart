@@ -1,4 +1,5 @@
 import 'package:exercise_tracker/ui/Activity/pages/home.dart';
+import 'package:exercise_tracker/ui/User/pages/login.dart';
 import 'package:get/get.dart';
 import '../models/user_model.dart';
 
@@ -64,21 +65,21 @@ class UserController extends GetxController {
     }
 
     if (sw == 1) {
-      if (emailRegex.hasMatch(email)) {      User userToAdd = User(
-          id: (_users.length + 1).toString(),
-          name: name,
-          lastName: lastName,
-          email: email,
-          password: password);
-      _users.add(userToAdd);
-      user.value = userToAdd;
-      Get.to(() => HomeView());
-  // El texto es una dirección de correo electrónico válida
-} else {
-    Get.snackbar('Error', 'Digite una direccion de correo valida');
-  // El texto no es una dirección de correo electrónico válida
-}
-
+      if (emailRegex.hasMatch(email)) {
+        User userToAdd = User(
+            id: (_users.length + 1).toString(),
+            name: name,
+            lastName: lastName,
+            email: email,
+            password: password);
+        _users.add(userToAdd);
+        user.value = userToAdd;
+        Get.to(() => HomeView());
+        // El texto es una dirección de correo electrónico válida
+      } else {
+        Get.snackbar('Error', 'Digite una direccion de correo valida');
+        // El texto no es una dirección de correo electrónico válida
+      }
     } else {
       Get.snackbar('Error', 'Este correo ya se encuentra registrado');
     }
@@ -86,6 +87,6 @@ class UserController extends GetxController {
 
   void logout() {
     user.value = null;
-    Get.offAllNamed('/');
+    Get.to(() => LoginView());
   }
 }

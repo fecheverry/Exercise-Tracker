@@ -76,7 +76,9 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
+              backgroundColor: Colors.blue, // color de fondo del BottomNavigationBar
+        selectedItemColor: Colors.amber, // color de los elementos seleccionados
+        unselectedItemColor: Colors.grey,
         currentIndex: 0,
         onTap: (index) {
           if (index == 1) {
@@ -84,6 +86,31 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
           }
           if (index == 2) {
             Get.to(() => const SegmentHistoryView());
+          } if (index == 3) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('¿Está seguro desea cerrar la sesion?'),
+                    actions: [
+                      TextButton(
+                        child: const Text('Cancelar'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Sí'),
+                        onPressed: () {
+                        
+                          Navigator.of(context).pop();
+                            _userController.logout();
+                        },
+                      ),
+                    ],
+                  );
+                });
+          
           }
         },
         items: const [
@@ -99,6 +126,11 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.segment),
+            label: "",
+          ),BottomNavigationBarItem(
+            icon: Icon(
+              Icons.logout,
+            ),
             label: "",
           ),
         ],

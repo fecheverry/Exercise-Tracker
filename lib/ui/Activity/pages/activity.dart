@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:exercise_tracker/ui/Activity/controllers/activity_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../Segment/models/segment_model.dart';
 import '../../User/controllers/user_controller.dart';
 import 'activiy_finished.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,7 +11,8 @@ import 'package:flutter/material.dart';
 
 class ActivityView extends StatefulWidget {
   final String type;
-  const ActivityView({super.key, required this.type});
+  List<Segment> segments = [];
+  ActivityView({super.key, required this.type});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -155,7 +157,8 @@ class _ActivityViewState extends State<ActivityView> {
                         _formattedTime(_stopwatch.elapsed),
                         "00.0",
                         DateTime.now().toString(),
-                        widget.type);
+                        widget.type,
+                        widget.segments);
                     _stopTimer();
                   },
                   child: const Text(
