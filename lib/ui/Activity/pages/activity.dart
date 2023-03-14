@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:exercise_tracker/ui/Activity/controllers/activity_controller.dart';
+import 'package:exercise_tracker/ui/Activity/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Segment/models/segment_model.dart';
@@ -11,7 +12,7 @@ import 'package:flutter/material.dart';
 
 class ActivityView extends StatefulWidget {
   final String type;
-  List<Segment> segments = [];
+  List<TimeSegment> segments = [TimeSegment(id: "01", idSegment: "00", time: "00:00:00", segmentName: "LA 59")];
   ActivityView({super.key, required this.type});
 
   @override
@@ -153,7 +154,6 @@ class _ActivityViewState extends State<ActivityView> {
                 child: ElevatedButton(
                   onPressed: () {
                     _activityController.addActivity(
-                        _userController.userInfo!.id,
                         _formattedTime(_stopwatch.elapsed),
                         "00.0",
                         DateTime.now().toString(),

@@ -1,8 +1,11 @@
+import 'package:exercise_tracker/ui/Segment/controllers/segment_controller.dart';
 import 'package:exercise_tracker/ui/Segment/pages/segment_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SegmentCreationView extends StatelessWidget {
+  SegmentController _segmentController = Get.find();
+
   final TextEditingController _segmentNameController = TextEditingController();
   final TextEditingController _startController = TextEditingController();
   final TextEditingController _endController = TextEditingController();
@@ -52,9 +55,9 @@ class SegmentCreationView extends StatelessWidget {
             ),
             const Spacer(),
             ElevatedButton(
-               onPressed: () {
-                  Get.to(() => const SegmentHistoryView());
-                },
+              onPressed: () {
+                _segmentController.addSegment(_segmentNameController.text, _startController.text, _endController.text);
+              },
               child: const Text('CREAR SEGMENTO'),
             ),
           ],

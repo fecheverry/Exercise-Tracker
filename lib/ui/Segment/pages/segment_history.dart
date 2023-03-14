@@ -1,8 +1,10 @@
 import 'package:exercise_tracker/ui/Activity/pages/home.dart';
+import 'package:exercise_tracker/ui/Segment/controllers/segment_controller.dart';
 import 'package:exercise_tracker/ui/Segment/pages/segment_create.dart';
 import 'package:exercise_tracker/ui/Segment/pages/segment_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../models/segment_model.dart';
 
 import '../../Activity/pages/activity_history.dart';
 import '../../User/controllers/user_controller.dart';
@@ -16,71 +18,15 @@ class SegmentHistoryView extends StatefulWidget {
 }
 
 class _SegmentHistoryViewState extends State<SegmentHistoryView> {
+  bool _myList = false;
   final UserController _userController = Get.find();
-  final List<Segmento> _segmentos = [
-    Segmento(
-      name: "SEGMENTO 1",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-    Segmento(
-      name: "SEGMENTO 2",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-    Segmento(
-      name: "SEGMENTO 3",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-    Segmento(
-      name: "SEGMENTO 1",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-    Segmento(
-      name: "SEGMENTO 2",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-    Segmento(
-      name: "SEGMENTO 3",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-    Segmento(
-      name: "SEGMENTO 1",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-    Segmento(
-      name: "SEGMENTO 2",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-    Segmento(
-      name: "SEGMENTO 3",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-    Segmento(
-      name: "SEGMENTO 1",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-    Segmento(
-      name: "SEGMENTO 2",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-    Segmento(
-      name: "SEGMENTO 3",
-      start: "CRA 1",
-      end: "CRA 2",
-    ),
-  ];
+  final SegmentController _segmentController = Get.find();
 
-  bool _visible = true;
+  void _changeList() {
+    setState(() {
+      _myList = !_myList;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,48 +47,108 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
           style: TextStyle(color: Colors.amber),
         ),
       ),
-      body: ListView.separated(
-        itemCount: _segmentos.length,
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
-        itemBuilder: (BuildContext context, int index) {
-          final segmento = _segmentos[index];
-          return Dismissible(
-            key: UniqueKey(),
-            onDismissed: (direction) {
-              setState(() {
-                _segmentos.removeAt(index);
-              });
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("segmento eliminado"),
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            },
-            background: Container(color: Colors.red),
-            child: ListTile(
-              title: Text(segmento.name),
-              subtitle: Text(
-                'Empieza en: ${segmento.start} \nTermina en: ${segmento.end}',
-              ),
-              onTap: () {
-                _visible = !_visible;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SegmentDetailView(),
+      body: _myList
+          ? ListView.separated(
+              itemCount: _segmentController.mySegments.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+              itemBuilder: (BuildContext context, int index) {
+                final segmento = _segmentController.mySegments[index];
+                return Dismissible(
+                  key: UniqueKey(),
+                  onDismissed: (direction) {
+                    setState(() {
+                      _segmentController.mySegments.removeAt(index);
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("segmento eliminado"),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                  background: Container(color: Colors.red),
+                  child: ListTile(
+                    title: Text(segmento.name),
+                    subtitle: Text(
+                      'Empieza en: ${segmento.start} \nTermina en: ${segmento.end}',
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SegmentDetailView(),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            )
+          : ListView.separated(
+              itemCount: _segmentController.allSegments.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+              itemBuilder: (BuildContext context, int index) {
+                final segmento = _segmentController.allSegments[index];
+                return Dismissible(
+                  key: UniqueKey(),
+                  onDismissed: (direction) {
+                    setState(() {
+                      _segmentController.allSegments.removeAt(index);
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("segmento eliminado"),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                  background: Container(color: Colors.red),
+                  child: ListTile(
+                    title: Text(segmento.name),
+                    subtitle: Text(
+                      'Empieza en: ${segmento.start} \nTermina en: ${segmento.end}',
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SegmentDetailView(),
+                        ),
+                      );
+                    },
                   ),
                 );
               },
             ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.to(() => SegmentCreationView());
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Stack(
+        children: [
+          Positioned(
+            bottom: 60,
+            right: 0,
+            child: FloatingActionButton(
+              heroTag: "btn1",
+              onPressed: () {
+                _changeList();
+              },
+              child: _myList
+                  ? const Icon(Icons.public)
+                  : const Icon(Icons.public_off),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: FloatingActionButton(
+              heroTag: "btn2",
+              onPressed: () {
+                Get.to(() => SegmentCreationView());
+              },
+              child: const Icon(Icons.add),
+            ),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: BottomNavigationBar(
@@ -174,9 +180,8 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
                       TextButton(
                         child: const Text('Sí'),
                         onPressed: () {
-                         
                           Navigator.of(context).pop();
-                           _userController.logout();
+                          _userController.logout();
                         },
                       ),
                     ],
@@ -209,12 +214,4 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
       ),
     );
   }
-}
-
-class Segmento {
-  final String name;
-  final String start;
-  final String end;
-
-  Segmento({required this.name, required this.start, required this.end});
 }

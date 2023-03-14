@@ -27,7 +27,7 @@ class ActivityFinishedView extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 20.0),
+        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -60,7 +60,7 @@ class ActivityFinishedView extends StatelessWidget {
               height: 20,
             ),
             Row(
-              children:  [
+              children: [
                 Text(
                   activity.distance,
                   textAlign: TextAlign.center,
@@ -89,9 +89,9 @@ class ActivityFinishedView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 30,
+                  width: 90,
                   height: 1,
-                  color: Colors.grey,
+                  color: Colors.black,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -105,30 +105,27 @@ class ActivityFinishedView extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  width: 30,
+                  width: 90,
                   height: 1,
-                  color: Colors.grey,
+                  color: Colors.black,
                 ),
               ],
             ),
-            /*Expanded(
+            Expanded(
               child: ListView.builder(
-                itemCount: segmentos.length,
+                itemCount: activity.segments.length,
                 itemBuilder: (context, index) {
-                  final segmento = segmentos[index];
+                  final segmento = activity.segments[index];
                   return ListTile(
-                    title: Text(segmento['nombre']!),
+                    title: Text(segmento.segmentName),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Tiempo: ${segmento['tiempo']}'),
-                        Text('Ranking: ${segmento['ranking']}'),
-                      ],
+                      children: [Text('Tiempo: ${segmento.time}')],
                     ),
                   );
                 },
               ),
-            )*/
+            )
           ],
         ),
       ),

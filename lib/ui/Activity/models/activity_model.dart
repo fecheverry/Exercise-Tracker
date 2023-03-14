@@ -1,5 +1,3 @@
-import '../../Segment/models/segment_model.dart';
-
 class Activity {
   final String id;
   final String idUser;
@@ -7,12 +5,22 @@ class Activity {
   final String distance;
   final String date;
   final String type;
-  List<Segment> segments;
+  List<TimeSegment> segments;
   Activity(
       {required this.id,
       required this.idUser,
       required this.duration,
       required this.distance,
       required this.date,
-      required this.type,required this.segments});
+      required this.type,
+      required this.segments});
+}
+
+class TimeSegment {
+  final String id;
+  final String idSegment;
+    final String segmentName;
+  final String time;
+
+  TimeSegment({required this.id, required this.idSegment, required this.time,required this.segmentName});
 }

@@ -47,7 +47,7 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
             key: UniqueKey(),
             onDismissed: (direction) {
               setState(() {
-                _activityController.listActivities.removeAt(index);
+                _activityController.removeAvtivity(index);
               });
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -76,7 +76,7 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-              backgroundColor: Colors.blue, // color de fondo del BottomNavigationBar
+        backgroundColor: Colors.blue, // color de fondo del BottomNavigationBar
         selectedItemColor: Colors.amber, // color de los elementos seleccionados
         unselectedItemColor: Colors.grey,
         currentIndex: 0,
@@ -86,8 +86,9 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
           }
           if (index == 2) {
             Get.to(() => const SegmentHistoryView());
-          } if (index == 3) {
-              showDialog(
+          }
+          if (index == 3) {
+            showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
@@ -102,15 +103,13 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
                       TextButton(
                         child: const Text('Sí'),
                         onPressed: () {
-                        
                           Navigator.of(context).pop();
-                            _userController.logout();
+                          _userController.logout();
                         },
                       ),
                     ],
                   );
                 });
-          
           }
         },
         items: const [
@@ -127,7 +126,8 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
           BottomNavigationBarItem(
             icon: Icon(Icons.segment),
             label: "",
-          ),BottomNavigationBarItem(
+          ),
+          BottomNavigationBarItem(
             icon: Icon(
               Icons.logout,
             ),
