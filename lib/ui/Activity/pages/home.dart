@@ -13,6 +13,43 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('¿Está seguro desea cerrar la sesion?'),
+                      actions: [
+                        TextButton(
+                          child: const Text('Cancelar'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: const Text('Sí'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            _userController.logout();
+                          },
+                        ),
+                      ],
+                    );
+                  });
+            },
+            icon: Icon(
+              Icons.logout,
+              color: Colors.amber,
+            ),
+          ),
+        ],
+      ),
       backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -65,7 +102,7 @@ class HomeView extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blue, // color de fondo del BottomNavigationBar
+        backgroundColor: Colors.white, // color de fondo del BottomNavigationBar
         selectedItemColor: Colors.amber, // color de los elementos seleccionados
         unselectedItemColor: Colors.grey,
         currentIndex: 1,
@@ -76,51 +113,21 @@ class HomeView extends StatelessWidget {
           if (index == 2) {
             Get.to(() => const SegmentHistoryView());
           }
-          if (index == 3) {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('¿Está seguro desea cerrar la sesion?'),
-                    actions: [
-                      TextButton(
-                        child: const Text('Cancelar'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Sí'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          _userController.logout();
-                        },
-                      ),
-                    ],
-                  );
-                });
-          }
         },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
               Icons.directions_run,
             ),
-            label: "",
+            label: "Actividades",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.watch_later),
-            label: "",
+            label: "Iniciar",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.segment),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.logout,
-            ),
-            label: "",
+            label: "Segmentos",
           ),
         ],
       ),

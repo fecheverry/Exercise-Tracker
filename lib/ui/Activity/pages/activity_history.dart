@@ -24,59 +24,57 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0, //remover sombra
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.amber[400],
-          onPressed: () {
-            Get.to(() => HomeView());
-          },
-        ),
         title: const Text(
           'ACTIVIDADES',
           style: TextStyle(color: Colors.amber),
         ),
       ),
-      body: ListView.separated(
+      body: ListView.builder(
         itemCount: _activityController.listActivities.length,
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
         itemBuilder: (BuildContext context, int index) {
-          final actividad = _activityController.listActivities[index];
           return Dismissible(
-            key: UniqueKey(),
+            key: Key(_activityController.listActivities[index].date),
+            direction: DismissDirection.endToStart,
             onDismissed: (direction) {
               setState(() {
                 _activityController.removeAvtivity(index);
               });
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Actividad eliminada"),
-                  duration: Duration(seconds: 2),
-                ),
-              );
             },
-            background: Container(color: Colors.red),
-            child: ListTile(
-              title: Text(actividad.date),
-              subtitle: Text(
-                'Duración: ${actividad.duration}',
+            background: Container(
+              alignment: Alignment.centerRight,
+              color: Colors.red,
+              child: const Padding(
+                padding: EdgeInsets.only(right: 16.0),
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        ActivityDetailView(actividad: actividad),
-                  ),
-                );
-              },
+            ),
+            child: Card(
+              child: ListTile(
+                title: Text(_activityController.listActivities[index].date),
+                subtitle:
+                    Text(_activityController.listActivities[index].duration),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ActivityDetailView(
+                          actividad: _activityController.listActivities[index]),
+                    ),
+                  );
+                },
+              ),
             ),
           );
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blue, // color de fondo del BottomNavigationBar
+        backgroundColor: Colors.white, // color de fondo del BottomNavigationBar
         selectedItemColor: Colors.amber, // color de los elementos seleccionados
         unselectedItemColor: Colors.grey,
         currentIndex: 0,
@@ -87,51 +85,21 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
           if (index == 2) {
             Get.to(() => const SegmentHistoryView());
           }
-          if (index == 3) {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('¿Está seguro desea cerrar la sesion?'),
-                    actions: [
-                      TextButton(
-                        child: const Text('Cancelar'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Sí'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          _userController.logout();
-                        },
-                      ),
-                    ],
-                  );
-                });
-          }
         },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
               Icons.directions_run,
             ),
-            label: "",
+            label: "Actividades",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.watch_later),
-            label: "",
+            label: "Iniciar",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.segment),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.logout,
-            ),
-            label: "",
+            label: "Segmentos",
           ),
         ],
       ),

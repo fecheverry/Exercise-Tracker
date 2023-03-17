@@ -33,91 +33,122 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+          automaticallyImplyLeading: false, 
         backgroundColor: Colors.white,
         elevation: 0, //remover sombra
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.amber[400],
-          onPressed: () {
-            Get.to(() => HomeView());
-          },
-        ),
+        
         title: const Text(
           'SEGMENTOS',
           style: TextStyle(color: Colors.amber),
         ),
       ),
       body: _myList
-          ? ListView.separated(
+          ? ListView.builder(
               itemCount: _segmentController.mySegments.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
               itemBuilder: (BuildContext context, int index) {
-                final segmento = _segmentController.mySegments[index];
                 return Dismissible(
-                  key: UniqueKey(),
+                  key: Key(_segmentController.mySegments[index].name),
+                  direction: DismissDirection.endToStart,
                   onDismissed: (direction) {
-                    setState(() {
-                      _segmentController.mySegments.removeAt(index);
-                    });
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("segmento eliminado"),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
+                    setState(() {});
                   },
-                  background: Container(color: Colors.red),
-                  child: ListTile(
-                    title: Text(segmento.name),
-                    subtitle: Text(
-                      'Empieza en: ${segmento.start} \nTermina en: ${segmento.end}',
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    color: Colors.red,
+                    child: const Padding(
+                      padding: EdgeInsets.only(right: 16.0),
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SegmentDetailView(),
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Card(
+                      child: ListTile(
+                        title: Text(
+                          _segmentController.mySegments[index].name,
+                          textAlign: TextAlign.start,
                         ),
-                      );
-                    },
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "EMPIEZA EN: ${_segmentController.mySegments[index].start}",
+                              textAlign: TextAlign.start,
+                            ),
+                            Text(
+                              "TERMINA EN: ${_segmentController.mySegments[index].end}",
+                              textAlign: TextAlign.start,
+                            )
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SegmentDetailView()),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 );
               },
             )
-          : ListView.separated(
+          : ListView.builder(
               itemCount: _segmentController.allSegments.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
               itemBuilder: (BuildContext context, int index) {
-                final segmento = _segmentController.allSegments[index];
                 return Dismissible(
-                  key: UniqueKey(),
+                  key: Key(_segmentController.allSegments[index].name),
+                  direction: DismissDirection.endToStart,
                   onDismissed: (direction) {
-                    setState(() {
-                      _segmentController.allSegments.removeAt(index);
-                    });
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("segmento eliminado"),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
+                    setState(() {});
                   },
-                  background: Container(color: Colors.red),
-                  child: ListTile(
-                    title: Text(segmento.name),
-                    subtitle: Text(
-                      'Empieza en: ${segmento.start} \nTermina en: ${segmento.end}',
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    color: Colors.red,
+                    child: const Padding(
+                      padding: EdgeInsets.only(right: 16.0),
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SegmentDetailView(),
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Card(
+                      child: ListTile(
+                        title: Text(
+                          _segmentController.allSegments[index].name,
+                          textAlign: TextAlign.start,
                         ),
-                      );
-                    },
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "EMPIEZA EN: ${_segmentController.allSegments[index].start}",
+                              textAlign: TextAlign.start,
+                            ),
+                            Text(
+                              "TERMINA EN: ${_segmentController.allSegments[index].end}",
+                              textAlign: TextAlign.start,
+                            )
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SegmentDetailView()),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 );
               },
@@ -152,7 +183,7 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blue, // color de fondo del BottomNavigationBar
+        backgroundColor: Colors.white, // color de fondo del BottomNavigationBar
         selectedItemColor: Colors.amber, // color de los elementos seleccionados
         unselectedItemColor: Colors.grey,
 
@@ -164,51 +195,21 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
           if (index == 1) {
             Get.to(() => HomeView());
           }
-          if (index == 3) {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('¿Está seguro desea cerrar la sesion?'),
-                    actions: [
-                      TextButton(
-                        child: const Text('Cancelar'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Sí'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          _userController.logout();
-                        },
-                      ),
-                    ],
-                  );
-                });
-          }
         },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
               Icons.directions_run,
             ),
-            label: "",
+            label: "Actividades",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.watch_later),
-            label: "",
+            label: "Iniciar",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.segment),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.logout,
-            ),
-            label: "",
+            label: "Segmentos",
           ),
         ],
       ),

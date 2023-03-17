@@ -1,5 +1,7 @@
 import 'package:exercise_tracker/ui/Activity/pages/home.dart';
 import 'package:exercise_tracker/ui/User/pages/login.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/user_model.dart';
 
@@ -50,7 +52,16 @@ class UserController extends GetxController {
       user.value = foundUser;
       Get.to(() => HomeView());
     } else {
-      Get.snackbar('Error', 'Usuario o contraseña invalidos');
+      Get.snackbar(
+        'Error',
+        'Usuario o contraseña invalidos',
+        margin: const EdgeInsets.all(16),
+        borderRadius: 8,
+        borderColor: Colors.amber,
+        borderWidth: 1,
+        backgroundColor: Colors.white,
+        colorText: Colors.black,
+      );
     }
   }
 
@@ -63,25 +74,57 @@ class UserController extends GetxController {
         break;
       }
     }
-
-    if (sw == 1) {
-      if (emailRegex.hasMatch(email)) {
-        User userToAdd = User(
-            id: (_users.length + 1).toString(),
-            name: name,
-            lastName: lastName,
-            email: email,
-            password: password);
-        _users.add(userToAdd);
-        user.value = userToAdd;
-        Get.to(() => HomeView());
-        // El texto es una dirección de correo electrónico válida
+    if (name.isNotEmpty &&
+        lastName.isNotEmpty &&
+        email.isNotEmpty & password.isNotEmpty) {
+      if (sw == 1) {
+        if (emailRegex.hasMatch(email)) {
+          User userToAdd = User(
+              id: (_users.length + 1).toString(),
+              name: name,
+              lastName: lastName,
+              email: email,
+              password: password);
+          _users.add(userToAdd);
+          user.value = userToAdd;
+          Get.to(() => HomeView());
+          // El texto es una dirección de correo electrónico válida
+        } else {
+          Get.snackbar(
+            'Error',
+            'Correo invalido',
+            margin: const EdgeInsets.all(16),
+            borderRadius: 8,
+            borderColor: Colors.amber,
+            borderWidth: 1,
+            backgroundColor: Colors.white,
+            colorText: Colors.black,
+          );
+          // El texto no es una dirección de correo electrónico válida
+        }
       } else {
-        Get.snackbar('Error', 'Digite una direccion de correo valida');
-        // El texto no es una dirección de correo electrónico válida
+        Get.snackbar(
+          'Error',
+          'Este correo ya se encuentra registrado',
+          margin: const EdgeInsets.all(16),
+          borderRadius: 8,
+          borderColor: Colors.amber,
+          borderWidth: 1,
+          backgroundColor: Colors.white,
+          colorText: Colors.black,
+        );
       }
     } else {
-      Get.snackbar('Error', 'Este correo ya se encuentra registrado');
+      Get.snackbar(
+        'Error',
+        'Rellene todos los campos',
+        margin: const EdgeInsets.all(16),
+        borderRadius: 8,
+        borderColor: Colors.amber,
+        borderWidth: 1,
+        backgroundColor: Colors.white,
+        colorText: Colors.black,
+      );
     }
   }
 
