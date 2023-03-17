@@ -25,7 +25,7 @@ class SegmentCreationView extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         title: const Text(
-          'REGISTRO',
+          'CREAR SEGMENTO',
           style: TextStyle(color: Colors.amber),
         ),
       ),
