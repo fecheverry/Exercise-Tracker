@@ -1,5 +1,7 @@
 import 'package:exercise_tracker/ui/Segment/models/segment_model.dart';
 import 'package:exercise_tracker/ui/Segment/pages/segment_history.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../User/controllers/user_controller.dart';
@@ -20,13 +22,30 @@ class SegmentController extends GetxController {
       .where((element) => element.idUser == _userController.userInfo!.id));
 
   void addSegment(String name, String start, String end) {
-    Segment segmentToAdd = Segment(
-        id: (_segments.length + 1).toString(),
-        idUser: _userController.userInfo!.id,
-        name: name,
-        start: start,
-        end: end);
-    _segments.add(segmentToAdd);
-    Get.to(() => const SegmentHistoryView());
+    if (name.isNotEmpty && start.isNotEmpty && end.isNotEmpty) {
+      Segment segmentToAdd = Segment(
+          id: (_segments.length + 1).toString(),
+          idUser: _userController.userInfo!.id,
+          name: name,
+          start: start,
+          end: end);
+      _segments.add(segmentToAdd);
+      Get.to(() => const SegmentHistoryView());
+    } else {
+      Get.snackbar(
+        'Error',
+        'Rellene todos los campos',
+        margin: const EdgeInsets.all(16),
+        borderRadius: 8,
+        borderColor: Colors.amber,
+        borderWidth: 1,
+        backgroundColor: Colors.white,
+        colorText: Colors.black,
+      );
+    }
+  }
+
+  void removeSegment(elem) {
+    _segments.remove(elem);
   }
 }

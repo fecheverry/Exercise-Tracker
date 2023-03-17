@@ -33,10 +33,10 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-          automaticallyImplyLeading: false, 
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0, //remover sombra
-        
+
         title: const Text(
           'SEGMENTOS',
           style: TextStyle(color: Colors.amber),
@@ -50,7 +50,9 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
                   key: Key(_segmentController.mySegments[index].name),
                   direction: DismissDirection.endToStart,
                   onDismissed: (direction) {
-                    setState(() {});
+                    setState(() {
+                      _segmentController.removeSegment(_segmentController.mySegments[index]);
+                    });
                   },
                   background: Container(
                     alignment: Alignment.centerRight,
@@ -101,53 +103,35 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
           : ListView.builder(
               itemCount: _segmentController.allSegments.length,
               itemBuilder: (BuildContext context, int index) {
-                return Dismissible(
-                  key: Key(_segmentController.allSegments[index].name),
-                  direction: DismissDirection.endToStart,
-                  onDismissed: (direction) {
-                    setState(() {});
-                  },
-                  background: Container(
-                    alignment: Alignment.centerRight,
-                    color: Colors.red,
-                    child: const Padding(
-                      padding: EdgeInsets.only(right: 16.0),
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.white,
+                return SizedBox(
+                  width: double.infinity,
+                  child: Card(
+                    child: ListTile(
+                      title: Text(
+                        _segmentController.allSegments[index].name,
+                        textAlign: TextAlign.start,
                       ),
-                    ),
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Card(
-                      child: ListTile(
-                        title: Text(
-                          _segmentController.allSegments[index].name,
-                          textAlign: TextAlign.start,
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "EMPIEZA EN: ${_segmentController.allSegments[index].start}",
-                              textAlign: TextAlign.start,
-                            ),
-                            Text(
-                              "TERMINA EN: ${_segmentController.allSegments[index].end}",
-                              textAlign: TextAlign.start,
-                            )
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SegmentDetailView()),
-                          );
-                        },
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "EMPIEZA EN: ${_segmentController.allSegments[index].start}",
+                            textAlign: TextAlign.start,
+                          ),
+                          Text(
+                            "TERMINA EN: ${_segmentController.allSegments[index].end}",
+                            textAlign: TextAlign.start,
+                          )
+                        ],
                       ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SegmentDetailView()),
+                        );
+                      },
                     ),
                   ),
                 );
