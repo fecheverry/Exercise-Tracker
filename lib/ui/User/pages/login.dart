@@ -2,6 +2,7 @@ import 'package:exercise_tracker/ui/User/controllers/user_controller.dart';
 import 'package:exercise_tracker/ui/User/pages/register.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable
@@ -10,11 +11,27 @@ class LoginView extends StatelessWidget {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
   LoginView({super.key});
+
+  Future<Position> _getCurrentLocation() async {
+    bool serviceEnable = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnable) {
+      return Future.error('Por favor active la ubicacion');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Para usar la aplicacion tienes que aceptar permisos de ubicacion');
+      }
+    }
+    return await Geolocator.getCurrentPosition();
+  }
 
   @override
   Widget build(BuildContext context) {
+    _getCurrentLocation();
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(

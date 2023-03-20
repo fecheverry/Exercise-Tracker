@@ -8,11 +8,13 @@ import '../../User/controllers/user_controller.dart';
 import 'activiy_finished.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter/material.dart';
 
 class ActivityView extends StatefulWidget {
   final String type;
-  List<TimeSegment> segments = [TimeSegment(id: "01", idSegment: "00", time: "00:00:00", segmentName: "LA 59")];
+  List<TimeSegment> segments = [
+    TimeSegment(
+        id: "01", idSegment: "00", time: "00:00:00", segmentName: "LA 59")
+  ];
   ActivityView({super.key, required this.type});
 
   @override
@@ -23,23 +25,39 @@ class ActivityView extends StatefulWidget {
 class _ActivityViewState extends State<ActivityView> {
   final UserController _userController = Get.find();
   final ActivityController _activityController = Get.find();
-
   late Stopwatch _stopwatch;
   late Timer _timer;
+  late LatLng _initialCameraPosition;
+  late GoogleMapController _mapController;
   bool _isRunning = true;
+  bool myLocationEnabled = false;
+
+  Future<void> _getCurrentLocation() async {
+    final Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    final LatLng latLng = LatLng(position.latitude, position.longitude);
+    _mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 15));
+  }
 
   @override
   void initState() {
     super.initState();
+    _getCurrentLocation();
     _stopwatch = Stopwatch();
+    Geolocator.getPositionStream().listen((position) {
+      final LatLng latLng = LatLng(position.latitude, position.longitude);
+      _mapController.animateCamera(CameraUpdate.newLatLng(latLng));
+    });
     _timer = Timer.periodic(const Duration(milliseconds: 10), _updateTimer);
+    _initialCameraPosition =
+        const LatLng(11.019211, -74.850314); // Posición inicial del mapa
     _stopwatch.start();
   }
 
   @override
   void dispose() {
     _timer.cancel();
-    _stopwatch.stop();
+    _stopwatch.stop(); // Cancelar la suscripción al stream de ubicación
     super.dispose();
   }
 
@@ -81,9 +99,6 @@ class _ActivityViewState extends State<ActivityView> {
     return "0$n";
   }
 
-  late GoogleMapController _mapController;
-  late Position _currentPosition;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,16 +129,20 @@ class _ActivityViewState extends State<ActivityView> {
           ),
           const Spacer(),
           SizedBox(
-            height: MediaQuery.of(context).size.height / 2, // Altura del mapa
+            height: MediaQuery.of(context).size.height / 2,
             child: GoogleMap(
               mapType: MapType.normal,
-              initialCameraPosition: const CameraPosition(
-                target: LatLng(11.019211, -74.850314),
+              initialCameraPosition: CameraPosition(
+                target: _initialCameraPosition,
                 zoom: 15,
               ),
               onMapCreated: (GoogleMapController controller) {
                 _mapController = controller;
+                setState(() {
+                  myLocationEnabled = true;
+                });
               },
+              myLocationEnabled: myLocationEnabled,
             ),
           ),
           Row(
