@@ -15,6 +15,7 @@ class SegmentCreationView extends StatelessWidget {
   final TextEditingController _endController = TextEditingController();
   final polylinePoints = PolylinePoints();
 
+  Set<Polyline> _polylines = {};
   Set<Marker> _markers = {};
   LatLng? _startCoordinate;
   LatLng? _endCoordinate;
@@ -86,6 +87,7 @@ class SegmentCreationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -126,7 +128,7 @@ class SegmentCreationView extends StatelessWidget {
             ),
             const Spacer(),
             SizedBox(
-              height: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width - 100,
               child: GoogleMap(
                 initialCameraPosition: CameraPosition(
                   target: LatLng(11.019211, -74.850314),
