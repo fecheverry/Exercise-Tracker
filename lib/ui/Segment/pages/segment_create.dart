@@ -13,8 +13,8 @@ class SegmentCreationView extends StatelessWidget {
   final TextEditingController _segmentNameController = TextEditingController();
   final TextEditingController _startController = TextEditingController();
   final TextEditingController _endController = TextEditingController();
+  final polylinePoints = PolylinePoints();
 
-  List<LatLng> _routeCoordinates = [];
   Set<Marker> _markers = {};
   LatLng? _startCoordinate;
   LatLng? _endCoordinate;
@@ -34,12 +34,10 @@ class SegmentCreationView extends StatelessWidget {
       _endCoordinate =
           LatLng(endLocations[0].latitude, endLocations[0].longitude);
     }
-
     // Crear marcadores
     if (_startCoordinate != null && _endCoordinate != null) {
       // Eliminar marcadores y ruta existentes
       _markers.clear();
-      _routeCoordinates.clear();
 
       // Crear marcadores
       _markers = {
@@ -143,7 +141,9 @@ class SegmentCreationView extends StatelessWidget {
             Row(
               children: [
                 ElevatedButton(
-                  onPressed: _getCoordinates,
+                  onPressed: () async {
+                    await _getCoordinates();
+                  },
                   child: const Text('TRAZAR RUTA'),
                 ),
                 const SizedBox(width: 50.0),

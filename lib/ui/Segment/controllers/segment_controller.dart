@@ -3,6 +3,7 @@ import 'package:exercise_tracker/ui/Segment/pages/segment_history.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter_platform_interface/src/types/polyline.dart';
 
 import '../../User/controllers/user_controller.dart';
 
@@ -20,6 +21,8 @@ class SegmentController extends GetxController {
   List<Segment> get allSegments => _segments;
   List<Segment> get mySegments => List<Segment>.from(_segments
       .where((element) => element.idUser == _userController.userInfo!.id));
+
+  get polyline => null;
 
   void addSegment(String name, String start, String end) {
     if (name.isNotEmpty && start.isNotEmpty && end.isNotEmpty) {
@@ -48,4 +51,6 @@ class SegmentController extends GetxController {
   void removeSegment(elem) {
     _segments.remove(elem);
   }
+
+  void setPolyline(Polyline polyline) {}
 }
