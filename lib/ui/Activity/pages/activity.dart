@@ -3,27 +3,23 @@ import 'package:exercise_tracker/ui/Activity/controllers/activity_controller.dar
 import 'package:exercise_tracker/ui/Activity/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../Segment/models/segment_model.dart';
-import '../../User/controllers/user_controller.dart';
-import 'activiy_finished.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
+// ignore: must_be_immutable
 class ActivityView extends StatefulWidget {
   final String type;
   List<TimeSegment> segments = [
     TimeSegment(
         id: "01", idSegment: "00", time: "00:00:00", segmentName: "LA 59")
   ];
-  ActivityView({super.key, required this.type});
+  ActivityView({required this.type});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ActivityViewState createState() => _ActivityViewState();
 }
 
 class _ActivityViewState extends State<ActivityView> {
-  final UserController _userController = Get.find();
   final ActivityController _activityController = Get.find();
   late Stopwatch _stopwatch;
   late Timer _timer;
@@ -80,11 +76,10 @@ class _ActivityViewState extends State<ActivityView> {
     });
   }
 
-  void _stopTimer() {
+  void  _stopTimer() {
     _timer.cancel();
     _stopwatch.stop();
     _stopwatch.reset();
-    setState(() {});
   }
 
   String _formattedTime(Duration duration) {
@@ -171,14 +166,15 @@ class _ActivityViewState extends State<ActivityView> {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 2 - 10,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: ()  {
+                     _stopTimer();
                     _activityController.addActivity(
-                        _formattedTime(_stopwatch.elapsed),
-                        "00.0",
-                        DateTime.now().toString(),
-                        widget.type,
-                        widget.segments);
-                    _stopTimer();
+                      _formattedTime(_stopwatch.elapsed),
+                      "00.0",
+                      DateTime.now().toString(),
+                      widget.type,
+                      widget.segments,
+                    );
                   },
                   child: const Text(
                     "FINALIZAR",
