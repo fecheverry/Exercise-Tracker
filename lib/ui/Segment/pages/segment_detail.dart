@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../models/segment_model.dart';
+
 class SegmentDetailView extends StatelessWidget {
-  SegmentDetailView({
-    super.key,
-  });
+  final Segment segmento;
+  SegmentDetailView({super.key, required this.segmento});
 
   final List<Map<String, String>> _rankingData = [
     {"rank": "1", "name": "John Doe", "time": "2:45:12"},
@@ -38,7 +39,7 @@ class SegmentDetailView extends StatelessWidget {
         ),
         // ignore: prefer_const_constructors
         title: Text(
-          "SEGMENTO 1",
+          segmento.name,
           style: const TextStyle(color: Colors.amber),
         ),
       ),
@@ -96,7 +97,7 @@ class SegmentDetailView extends StatelessWidget {
                       ),
                       // ignore: prefer_const_constructors
                       Text(
-                        "CRA 72 # 88-61",
+                        segmento.start,
                         style: const TextStyle(fontSize: 24.0),
                       ),
                     ],
@@ -113,7 +114,7 @@ class SegmentDetailView extends StatelessWidget {
                       ),
                       // ignore: prefer_const_constructors
                       Text(
-                        "CRA 41 # 59-36",
+                        segmento.end,
                         style: const TextStyle(fontSize: 24.0),
                       ),
                     ],

@@ -1,10 +1,8 @@
 import 'package:exercise_tracker/ui/Segment/models/segment_model.dart';
 import 'package:exercise_tracker/ui/Segment/pages/segment_history.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/polyline.dart';
-
 import '../../User/controllers/user_controller.dart';
 
 class SegmentController extends GetxController {
@@ -16,7 +14,7 @@ class SegmentController extends GetxController {
         name: "LA 59",
         start: "CRA 72 #88-61",
         end: "CRA 41 #59-36")
-  ];
+  ].obs;
 
   List<Segment> get allSegments => _segments;
   List<Segment> get mySegments => List<Segment>.from(_segments

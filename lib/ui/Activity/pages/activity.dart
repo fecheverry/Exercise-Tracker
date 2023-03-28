@@ -13,9 +13,10 @@ class ActivityView extends StatefulWidget {
     TimeSegment(
         id: "01", idSegment: "00", time: "00:00:00", segmentName: "LA 59")
   ];
-  ActivityView({required this.type});
+  ActivityView({super.key, required this.type});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ActivityViewState createState() => _ActivityViewState();
 }
 
@@ -167,14 +168,14 @@ class _ActivityViewState extends State<ActivityView> {
                 width: MediaQuery.of(context).size.width / 2 - 10,
                 child: ElevatedButton(
                   onPressed: ()  {
-                     _stopTimer();
+                   
                     _activityController.addActivity(
                       _formattedTime(_stopwatch.elapsed),
                       "00.0",
                       DateTime.now().toString(),
                       widget.type,
                       widget.segments,
-                    );
+                    );  _stopTimer();
                   },
                   child: const Text(
                     "FINALIZAR",

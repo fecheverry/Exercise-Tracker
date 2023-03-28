@@ -112,23 +112,23 @@ class SegmentCreationView extends StatelessWidget {
                 labelText: 'Nombre del segmento',
               ),
             ),
-            const SizedBox(height: 16.0),
             TextField(
               controller: _startController,
               decoration: const InputDecoration(
                 labelText: 'Inicio',
               ),
             ),
-            const SizedBox(height: 16.0),
             TextField(
               controller: _endController,
               decoration: const InputDecoration(
                 labelText: 'Fin',
               ),
             ),
-            const Spacer(),
+            const SizedBox(
+              height: 20,
+            ),
             SizedBox(
-              height: MediaQuery.of(context).size.width - 100,
+              height: MediaQuery.of(context).size.height / 3,
               child: GoogleMap(
                 initialCameraPosition: CameraPosition(
                   target: LatLng(11.019211, -74.850314),
@@ -140,6 +140,7 @@ class SegmentCreationView extends StatelessWidget {
                 },
               ),
             ),
+            const Spacer(),
             Row(
               children: [
                 ElevatedButton(
@@ -148,11 +149,22 @@ class SegmentCreationView extends StatelessWidget {
                   },
                   child: const Text('TRAZAR RUTA'),
                 ),
-                const SizedBox(width: 50.0),
+                const Spacer(),
                 ElevatedButton(
                   onPressed: () {
-                    _segmentController.addSegment(_segmentNameController.text,
-                        _startController.text, _endController.text);
+                    if (_segmentNameController.text.isNotEmpty &&
+                        _startController.text.isNotEmpty &&
+                        _endController.text.isNotEmpty) {
+                      _segmentController.addSegment(_segmentNameController.text,
+                          _startController.text, _endController.text);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Error'),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                    }
                   },
                   child: const Text('CREAR SEGMENTO'),
                 ),

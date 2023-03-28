@@ -43,34 +43,75 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
         ),
       ),
       body: _myList
-          ? ListView.builder(
-              itemCount: _segmentController.mySegments.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Dismissible(
-                  key: Key(_segmentController.mySegments[index].name),
-                  direction: DismissDirection.endToStart,
-                  onDismissed: (direction) {
-                    setState(() {
-                      _segmentController.removeSegment(_segmentController.mySegments[index]);
-                    });
-                  },
-                  background: Container(
-                    alignment: Alignment.centerRight,
-                    color: Colors.red,
-                    child: const Padding(
-                      padding: EdgeInsets.only(right: 16.0),
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.white,
+          ? Obx(() => ListView.builder(
+                itemCount: _segmentController.mySegments.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Dismissible(
+                    key: Key(_segmentController.mySegments[index].name),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (direction) {
+                      setState(() {
+                        _segmentController.removeSegment(
+                            _segmentController.mySegments[index]);
+                      });
+                    },
+                    background: Container(
+                      alignment: Alignment.centerRight,
+                      color: Colors.red,
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 16.0),
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  child: SizedBox(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Card(
+                        child: ListTile(
+                          title: Text(
+                            _segmentController.mySegments[index].name,
+                            textAlign: TextAlign.start,
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "EMPIEZA EN: ${_segmentController.mySegments[index].start}",
+                                textAlign: TextAlign.start,
+                              ),
+                              Text(
+                                "TERMINA EN: ${_segmentController.mySegments[index].end}",
+                                textAlign: TextAlign.start,
+                              )
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                            MaterialPageRoute(
+                              builder: (context) => SegmentDetailView(
+                                  segmento:  _segmentController.mySegments[index]),
+                            ),
+                          );
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ))
+          : Obx(() => ListView.builder(
+                itemCount: _segmentController.allSegments.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return SizedBox(
                     width: double.infinity,
                     child: Card(
                       child: ListTile(
                         title: Text(
-                          _segmentController.mySegments[index].name,
+                          _segmentController.allSegments[index].name,
                           textAlign: TextAlign.start,
                         ),
                         subtitle: Column(
@@ -78,11 +119,11 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              "EMPIEZA EN: ${_segmentController.mySegments[index].start}",
+                              "EMPIEZA EN: ${_segmentController.allSegments[index].start}",
                               textAlign: TextAlign.start,
                             ),
                             Text(
-                              "TERMINA EN: ${_segmentController.mySegments[index].end}",
+                              "TERMINA EN: ${_segmentController.allSegments[index].end}",
                               textAlign: TextAlign.start,
                             )
                           ],
@@ -91,52 +132,16 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SegmentDetailView()),
+                              builder: (context) => SegmentDetailView(
+                                  segmento:  _segmentController.allSegments[index]),
+                            ),
                           );
                         },
                       ),
                     ),
-                  ),
-                );
-              },
-            )
-          : ListView.builder(
-              itemCount: _segmentController.allSegments.length,
-              itemBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                  width: double.infinity,
-                  child: Card(
-                    child: ListTile(
-                      title: Text(
-                        _segmentController.allSegments[index].name,
-                        textAlign: TextAlign.start,
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "EMPIEZA EN: ${_segmentController.allSegments[index].start}",
-                            textAlign: TextAlign.start,
-                          ),
-                          Text(
-                            "TERMINA EN: ${_segmentController.allSegments[index].end}",
-                            textAlign: TextAlign.start,
-                          )
-                        ],
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SegmentDetailView()),
-                        );
-                      },
-                    ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              )),
       floatingActionButton: Stack(
         children: [
           Positioned(

@@ -1,6 +1,5 @@
 import 'package:exercise_tracker/ui/Activity/pages/home.dart';
 import 'package:exercise_tracker/ui/User/pages/login.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/user_model.dart';

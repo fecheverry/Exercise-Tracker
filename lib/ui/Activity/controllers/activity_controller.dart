@@ -31,7 +31,6 @@ class ActivityController extends GetxController {
         segments: segments);
     _activities.add(activityToAdd);
     Get.to(() => ActivityFinishedView(activity: activityToAdd));
-   
   }
 
   void removeAvtivity(int index) {
