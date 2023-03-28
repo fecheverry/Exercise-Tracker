@@ -57,32 +57,32 @@ void main() {
     )));
     await tester.pump();
 
+    //Se verifica que se esten mostrando los elementos que deben ir en esta vista
     expect(find.widgetWithText(AppBar, "SEGMENTOS"), findsOneWidget);
     expect(find.byIcon(Icons.directions_run), findsOneWidget);
     expect(find.byIcon(Icons.watch_later), findsOneWidget);
     expect(find.byIcon(Icons.segment), findsOneWidget);
-
     expect(find.byIcon(Icons.public_off), findsOneWidget);
     expect(find.byIcon(Icons.add), findsOneWidget);
-
     expect(find.byType(Card), findsOneWidget);
+
+    //Se añade un nuevo segmento manualmente y posteriormente se valida que si se este mostrando en la lista de la vista
     mockSegmentController.addSegment("NUEVO", "INICIO", "FIN");
     await tester.pumpAndSettle();
     expect(find.byType(Card), findsNWidgets(2));
 
+    //Se cambia la lista para que solo se muestren solo los segmentos creados por el ususario con id =1, es decir, el segmento creado anteriormente y se verifica que si se este mostrando la cantidad real
     await tester.tap(find.byIcon(Icons.public_off));
     await tester.pumpAndSettle();
     expect(find.byType(Card), findsOneWidget);
 
+    //Se toma ese segmento creado por el usuario con id = 1, se desliza a la izquierda para borrarlo y se verifica que se haya borrado
     final cardFinder = find.byType(Card);
-
-    // arrastra la tarjeta hacia la izquierda
     await tester.drag(cardFinder, const Offset(-500.0, 0.0));
     await tester.pumpAndSettle();
-
-    // verifica que la tarjeta se ha eliminado
     expect(find.byType(Card), findsNothing);
 
+    //Se vuelve a la vista de todos los segmentos y verificamos que la cantidad que se muestra es la correcta despues de eliminar un segmentot
     await tester.tap(find.byIcon(Icons.public));
     await tester.pumpAndSettle();
     expect(find.byType(Card), findsOneWidget);

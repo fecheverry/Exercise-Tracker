@@ -29,7 +29,8 @@ void main() {
       ),
     )));
     await tester.pump();
-
+    
+    //Se verifica que se esten mostrando los elementos que deben ir en esta vista
     expect(find.widgetWithText(AppBar, "NOMBRE"), findsOneWidget);
     expect(find.widgetWithIcon(IconButton, Icons.arrow_back), findsOneWidget);
     expect(find.text('Mejor tiempo'), findsOneWidget);

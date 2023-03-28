@@ -46,15 +46,18 @@ void main() {
     final finalizar = find.widgetWithText(SizedBox, 'FINALIZAR');
     final pausar = find.widgetWithText(SizedBox, 'PAUSAR');
     
+    //Se verifica que se esten mostrando los elementos que deben ir en esta vista
     expect(finalizar, findsOneWidget);
     expect(pausar, findsOneWidget);
     expect(find.text('Duracion'), findsOneWidget);
     expect(find.text('Distancia'), findsOneWidget);
 
+    //Se presiona el boton de pausar y se verifica que el boton cambie de "PAUSAR" a "CONTINUAR"
     await tester.tap(pausar);
     await tester.pumpAndSettle();
     expect(find.widgetWithText(SizedBox, 'CONTINUAR'), findsOneWidget);
 
+    //Se Finaliza la actividad y se verifica que se haya agregado a la lista de actividades
     await tester.tap(finalizar);
     await tester.pumpAndSettle();
     expect(mockActivityController.listActivities.length, 1);

@@ -55,23 +55,22 @@ void main() {
     )));
     await tester.pump();
 
+    //Se verifica que se esten mostrando los elementos que deben ir en esta vista
     expect(find.widgetWithText(AppBar, "ACTIVIDADES"), findsOneWidget);
     expect(find.byIcon(Icons.directions_run), findsOneWidget);
     expect(find.byIcon(Icons.watch_later), findsOneWidget);
     expect(find.byIcon(Icons.segment), findsOneWidget);
-
     expect(find.byType(Card), findsOneWidget);
+
+    //Se agrega una actividad manualmente y se verifica que se este mostrando en la vista
     mockActivityController.addActivity("01", "", "", "", []);
     await tester.pumpAndSettle();
     expect(find.byType(Card), findsNWidgets(2));
 
+    //Se Toma la primera carta  y se desliza hacia la izquierda para eliminarla, luego se verifica que si se haya eliminado
     final cardFinder = find.byType(Card).first;
-
-    // arrastra la tarjeta hacia la izquierda
     await tester.drag(cardFinder, const Offset(-500.0, 0.0));
     await tester.pumpAndSettle();
-
-    // verifica que la tarjeta se ha eliminado
     expect(find.byType(Card), findsOneWidget);
 
     Get.delete<ActivityController>();

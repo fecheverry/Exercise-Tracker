@@ -52,20 +52,22 @@ void main() {
     )));
     await tester.pump();
 
+    //Se verifica que se esten mostrando los elementos que deben ir en esta vista
     expect(find.byType(TextField), findsNWidgets(3));
     expect(find.byType(ElevatedButton), findsNWidgets(2));
 
-    // Presionar el botón de crear segmento sin llenar ningún campo
+    //Se presiona el boton de crear segmento con los textField vacios para que se muesre un mensaje de error, luego se verifica que este mensaje de error si se esta mostrando
     await tester.tap(find.widgetWithText(ElevatedButton, 'CREAR SEGMENTO'));
     await tester.pumpAndSettle();
     expect(find.text('Error'), findsOneWidget);
     await tester.pumpAndSettle(const Duration(seconds: 5));
+
+    //Se escribe informacion en los textos y se oprime el boton de crear segmento y posteriormente se verifica que este elemento si se haya agregado a la lista
     await tester.enterText(find.byType(TextField).at(0), 'Segmento 1');
     await tester.enterText(find.byType(TextField).at(1), 'Inicio');
     await tester.enterText(find.byType(TextField).at(2), 'Fin');
     await tester.tap(find.widgetWithText(ElevatedButton, 'CREAR SEGMENTO'));
     await tester.pumpAndSettle();
-
     expect(mockSegmentController.allSegments.length, 2);
     expect(mockSegmentController.allSegments[1].name, 'Segmento 1');
     expect(mockSegmentController.allSegments[1].start, 'Inicio');
