@@ -2,13 +2,13 @@ import 'package:exercise_tracker/ui/Activity/controllers/activity_controller.dar
 import 'package:exercise_tracker/ui/Segment/controllers/segment_controller.dart';
 import 'package:exercise_tracker/ui/User/controllers/user_controller.dart';
 import 'package:exercise_tracker/ui/User/pages/login.dart';
-import 'package:exercise_tracker/ui/my_app.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:integration_test/integration_test_driver.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+
 
 Future<Widget> createLoginScreen() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +21,11 @@ Future<Widget> createLoginScreen() async {
 }
 
 void main() {
+
+   setUpAll(() async {
+    await Permission.location.request();
+  });
+  
   group("Autentication", () {
     final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized()
         as IntegrationTestWidgetsFlutterBinding;
@@ -31,7 +36,7 @@ void main() {
       Widget w = await createLoginScreen();
       await tester.pumpWidget(w);
 
-      await tester.tap(find.text("LOG IN"));
+    await tester.tap(find.widgetWithText(ElevatedButton, 'LOG IN'));
       await tester.pumpAndSettle(Duration(seconds: 5));
     });
   });
