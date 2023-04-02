@@ -23,7 +23,8 @@ class LoginView extends StatelessWidget {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Para usar la aplicacion tienes que aceptar permisos de ubicacion');
+        return Future.error(
+            'Para usar la aplicacion tienes que aceptar permisos de ubicacion');
       }
     }
     return await Geolocator.getCurrentPosition();
@@ -50,6 +51,7 @@ class LoginView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: TextField(
+                  key: const Key('email_input'),
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
@@ -61,6 +63,7 @@ class LoginView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: TextField(
+                  key: const Key('password_input'),
                   controller: _passwordController,
                   obscureText: true,
                   decoration: const InputDecoration(
@@ -78,8 +81,10 @@ class LoginView extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               TextButton(
+                key: const Key("registrarse_button"),
                 onPressed: () {
                   // Aquí puedes agregar la lógica para redirigir al usuario a la pantalla de registro
+                  Get.to(() => RegisterView());
                 },
                 child: RichText(
                   text: TextSpan(
@@ -94,10 +99,6 @@ class LoginView extends StatelessWidget {
                           color: Colors.amber[400],
                           fontWeight: FontWeight.bold,
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Get.to(() => RegisterView());
-                          },
                       ),
                     ],
                   ),

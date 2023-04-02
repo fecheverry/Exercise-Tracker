@@ -38,22 +38,24 @@ class RegisterView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(),
-            TextFormField(
+            TextFormField( key: const Key("nombre_text_field"),
               controller: _nameController,
               decoration: const InputDecoration(hintText: 'Nombre'),
             ),
             const SizedBox(height: 16),
             TextFormField(
+              key: const Key("apellido_text_field"),
               controller: _lastNameController,
               decoration: const InputDecoration(hintText: 'Apellido'),
             ),
             const SizedBox(height: 16),
-            TextFormField(
+            TextFormField( key: const Key("correo_text_field"),
               controller: _emailController,
               decoration: const InputDecoration(hintText: 'Correo'),
             ),
             const SizedBox(height: 16),
             TextFormField(
+              key: const Key("contraseña_text_field"),
               controller: _passwordController,
               decoration: const InputDecoration(hintText: 'Contraseña'),
               obscureText: true,
@@ -61,7 +63,7 @@ class RegisterView extends StatelessWidget {
             const Spacer(),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
+              child: ElevatedButton( key: const Key("crear_cuenta_button"),
                 onPressed: () {
                   _userController.register(
                       _nameController.text,
