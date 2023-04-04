@@ -88,6 +88,7 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
+              key: Key("activity_button"),
               Icons.directions_run,
             ),
             label: "Actividades",
