@@ -107,18 +107,21 @@ class SegmentCreationView extends StatelessWidget {
         child: Column(
           children: [
             TextField(
+              key: const Key("name_input"),
               controller: _segmentNameController,
               decoration: const InputDecoration(
                 labelText: 'Nombre del segmento',
               ),
             ),
             TextField(
+              key: const Key("start_input"),
               controller: _startController,
               decoration: const InputDecoration(
                 labelText: 'Inicio',
               ),
             ),
             TextField(
+              key: const Key("end_input"),
               controller: _endController,
               decoration: const InputDecoration(
                 labelText: 'Fin',
@@ -130,7 +133,7 @@ class SegmentCreationView extends StatelessWidget {
             SizedBox(
               height: MediaQuery.of(context).size.height / 3,
               child: GoogleMap(
-                initialCameraPosition: CameraPosition(
+                initialCameraPosition: const CameraPosition(
                   target: LatLng(11.019211, -74.850314),
                   zoom: 15,
                 ),
@@ -150,7 +153,7 @@ class SegmentCreationView extends StatelessWidget {
                   child: const Text('TRAZAR RUTA'),
                 ),
                 const Spacer(),
-                ElevatedButton(
+                ElevatedButton( key: const Key("create_button"),
                   onPressed: () {
                     if (_segmentNameController.text.isNotEmpty &&
                         _startController.text.isNotEmpty &&

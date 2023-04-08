@@ -147,7 +147,7 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
           Positioned(
             bottom: 60,
             right: 0,
-            child: FloatingActionButton(
+            child: FloatingActionButton(               key: const Key("public_button"),
               heroTag: "btn1",
               onPressed: () {
                 _changeList();
@@ -161,6 +161,7 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
             bottom: 0,
             right: 0,
             child: FloatingActionButton(
+              key: const Key("add_button"),
               heroTag: "btn2",
               onPressed: () {
                 Get.to(() => SegmentCreationView());
