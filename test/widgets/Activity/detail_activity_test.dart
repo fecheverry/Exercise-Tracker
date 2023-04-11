@@ -33,7 +33,8 @@ void main() {
                 idSegment: "00",
                 time: "00:00:00",
                 segmentName: "LA 59")
-          ])),
+          ],
+          points: [])),
     )));
     await tester.pump();
 

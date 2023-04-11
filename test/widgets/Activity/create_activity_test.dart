@@ -4,6 +4,7 @@ import 'package:exercise_tracker/ui/Activity/pages/activity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 
 class MockActivityController extends GetxService
@@ -13,7 +14,7 @@ class MockActivityController extends GetxService
 
   @override
   void addActivity(String duration, String distance, String date, String type,
-      List<TimeSegment> segments) {
+      List<TimeSegment> segments, List<LatLng> points) {
     Activity activityToAdd = Activity(
         id: (_activities.length + 1).toString(),
         idUser: "1",
@@ -21,7 +22,8 @@ class MockActivityController extends GetxService
         distance: distance,
         date: date,
         type: type,
-        segments: segments);
+        segments: segments,
+        points: points);
     _activities.add(activityToAdd);
   }
 @override

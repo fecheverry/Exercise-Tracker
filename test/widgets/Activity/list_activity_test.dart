@@ -4,6 +4,7 @@ import 'package:exercise_tracker/ui/Activity/pages/activity_history.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 
 class MockActivityController extends GetxService
@@ -17,12 +18,13 @@ class MockActivityController extends GetxService
         distance: "00.0",
         date: "date",
         type: "TROTE",
-        segments: [])
+        segments: [],
+        points: [])
   ].obs;
 
   @override
   void addActivity(String duration, String distance, String date, String type,
-      List<TimeSegment> segments) {
+      List<TimeSegment> segments, List<LatLng> points) {
     Activity activityToAdd = Activity(
         id: (_activities.length + 2).toString(),
         idUser: "1",
@@ -30,7 +32,8 @@ class MockActivityController extends GetxService
         distance: distance,
         date: date,
         type: type,
-        segments: segments);
+        segments: segments,
+        points: points);
     _activities.add(activityToAdd);
   }
 
@@ -63,7 +66,7 @@ void main() {
     expect(find.byType(Card), findsOneWidget);
 
     //Se agrega una actividad manualmente y se verifica que se este mostrando en la vista
-    mockActivityController.addActivity("01", "", "", "", []);
+    mockActivityController.addActivity("01", "", "", "", [], []);
     await tester.pumpAndSettle();
     expect(find.byType(Card), findsNWidgets(2));
 
