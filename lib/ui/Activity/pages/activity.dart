@@ -4,10 +4,12 @@ import 'package:exercise_tracker/ui/Activity/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 // ignore: must_be_immutable
 class ActivityView extends StatefulWidget {
   final String type;
+
   List<TimeSegment> segments = [
     TimeSegment(
         id: "01", idSegment: "00", time: "00:00:00", segmentName: "LA 59")
@@ -23,23 +25,52 @@ class _ActivityViewState extends State<ActivityView> {
   final ActivityController _activityController = Get.find();
   late Stopwatch _stopwatch;
   late Timer _timer;
+  double distancefinal = 0;
+  double distance = 0;
   bool _isRunning = true;
   bool myLocationEnabled = false;
+  List<LatLng> points = [];
+  StreamSubscription<Position>? _positionStreamSubscription;
+
+  final LocationSettings locationSettings = const LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 1,
+  );
 
   @override
   void initState() {
     super.initState();
+    _positionStreamSubscription =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position? position) {
+      if (position != null) {
+        LatLng latLng = LatLng(position.latitude, position.longitude);
+        setState(() {
+          points.add(latLng);
+          if (points.length > 1) {
+            _distence();
+          }
+        });
+      }
+    });
     _stopwatch = Stopwatch();
-
     _timer = Timer.periodic(const Duration(milliseconds: 10), _updateTimer);
-
     _stopwatch.start();
+  }
+
+  void _distence() {
+    distance = Geolocator.distanceBetween(
+        points.last.latitude,
+        points.last.longitude,
+        points[points.length - 2].latitude,
+        points[points.length - 2].longitude);
+    distancefinal = distance + distancefinal;
   }
 
   @override
   void dispose() {
     _timer.cancel();
-    _stopwatch.stop(); // Cancelar la suscripción al stream de ubicación
+    _stopwatch.stop();
     super.dispose();
   }
 
@@ -66,6 +97,10 @@ class _ActivityViewState extends State<ActivityView> {
     _timer.cancel();
     _stopwatch.stop();
     _stopwatch.reset();
+    if (_positionStreamSubscription != null) {
+      _positionStreamSubscription!.cancel();
+      _positionStreamSubscription = null;
+    }
   }
 
   String _formattedTime(Duration duration) {
@@ -108,9 +143,9 @@ class _ActivityViewState extends State<ActivityView> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    "0.00",
-                    style: TextStyle(fontSize: 65, color: Colors.black),
+                  Text(
+                    distancefinal.toStringAsFixed(2),
+                    style: const TextStyle(fontSize: 65, color: Colors.black),
                   ),
                   const Text(
                     "Distancia",
@@ -151,12 +186,12 @@ class _ActivityViewState extends State<ActivityView> {
                 child: ElevatedButton(
                   onPressed: () {
                     _activityController.addActivity(
-                      _formattedTime(_stopwatch.elapsed),
-                      "00.0",
-                      DateTime.now().toString(),
-                      widget.type,
-                      widget.segments,
-                    );
+                        _formattedTime(_stopwatch.elapsed),
+                        distancefinal.toStringAsFixed(2),
+                        DateTime.now().toString(),
+                        widget.type,
+                        widget.segments,
+                        points);
                     _stopTimer();
                   },
                   child: const Text(

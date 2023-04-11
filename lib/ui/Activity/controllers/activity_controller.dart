@@ -1,5 +1,6 @@
 import 'package:exercise_tracker/ui/Activity/models/activity_model.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../User/controllers/user_controller.dart';
 import '../pages/activiy_finished.dart';
 
@@ -13,14 +14,15 @@ class ActivityController extends GetxController {
         distance: "00.0",
         date: "date",
         type: "TROTE",
-        segments: [])
+        segments: [],
+        points: [])
   ].obs;
 
   List<Activity> get listActivities => List<Activity>.from(_activities
       .where((element) => element.idUser == _userController.userInfo!.id));
 
   void addActivity(String duration, String distance, String date, String type,
-      List<TimeSegment> segments) {
+      List<TimeSegment> segments, List<LatLng> points) {
     Activity activityToAdd = Activity(
         id: (_activities.length + 1).toString(),
         idUser: _userController.userInfo!.id,
@@ -28,7 +30,8 @@ class ActivityController extends GetxController {
         distance: distance,
         date: date,
         type: type,
-        segments: segments);
+        segments: segments,
+        points: points);
     _activities.add(activityToAdd);
     Get.to(() => ActivityFinishedView(activity: activityToAdd));
   }

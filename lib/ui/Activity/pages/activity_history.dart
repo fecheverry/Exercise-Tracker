@@ -54,7 +54,8 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
                 child: Card(
                   key: Key(_activityController.listActivities[index].date),
                   child: ListTile(
-                    title: Text(_activityController.listActivities[index].date),
+                    title: Text(_activityController.listActivities[index].date
+                        .substring(0, 11)),
                     subtitle: Text(
                         _activityController.listActivities[index].duration),
                     onTap: () {

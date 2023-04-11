@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import '../models/activity_model.dart';
 
 class ActivityDetailView extends StatefulWidget {
@@ -20,23 +20,19 @@ class _ActivityDetailViewState extends State<ActivityDetailView> {
   late LatLng _initialCameraPosition;
   late GoogleMapController _mapController;
   bool myLocationEnabled = false;
-
-  Future<void> _getCurrentLocation() async {
-    final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    final LatLng latLng = LatLng(position.latitude, position.longitude);
-    _mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 15));
-  }
+  PolylinePoints polylinePoints = PolylinePoints();
+  late Polyline _polyline;
 
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    _polyline = Polyline(
+      polylineId: PolylineId("line"),
+      color: Colors.red,
+      width: 5,
+      points: widget.actividad.points,
+    );
     _stopwatch = Stopwatch();
-    Geolocator.getPositionStream().listen((position) {
-      final LatLng latLng = LatLng(position.latitude, position.longitude);
-      _mapController.animateCamera(CameraUpdate.newLatLng(latLng));
-    });
     _initialCameraPosition =
         const LatLng(11.019211, -74.850314); // Posición inicial del mapa
     _stopwatch.start();
@@ -127,13 +123,10 @@ class _ActivityDetailViewState extends State<ActivityDetailView> {
                   target: _initialCameraPosition,
                   zoom: 15,
                 ),
+                polylines: Set<Polyline>.from([_polyline]),
                 onMapCreated: (GoogleMapController controller) {
                   _mapController = controller;
-                  setState(() {
-                    myLocationEnabled = true;
-                  });
                 },
-                myLocationEnabled: myLocationEnabled,
               ),
             ),
             const SizedBox(

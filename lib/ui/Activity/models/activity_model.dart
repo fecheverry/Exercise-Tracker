@@ -1,3 +1,5 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class Activity {
   final String id;
   final String idUser;
@@ -6,6 +8,7 @@ class Activity {
   final String date;
   final String type;
   List<TimeSegment> segments;
+  final List<LatLng> points;
   Activity(
       {required this.id,
       required this.idUser,
@@ -13,7 +16,8 @@ class Activity {
       required this.distance,
       required this.date,
       required this.type,
-      required this.segments});
+      required this.segments,
+      required this.points});
 }
 
 class TimeSegment {

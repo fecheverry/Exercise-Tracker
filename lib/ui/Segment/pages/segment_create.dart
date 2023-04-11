@@ -15,7 +15,6 @@ class SegmentCreationView extends StatelessWidget {
   final TextEditingController _endController = TextEditingController();
   final polylinePoints = PolylinePoints();
 
-  Set<Polyline> _polylines = {};
   Set<Marker> _markers = {};
   LatLng? _startCoordinate;
   LatLng? _endCoordinate;

@@ -1,11 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/activity_model.dart';
 import 'activity_history.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 class ActivityFinishedView extends StatefulWidget {
   final Activity activity;
@@ -17,8 +17,10 @@ class ActivityFinishedView extends StatefulWidget {
 
 class _ActivityFinishedViewState extends State<ActivityFinishedView> {
   late Stopwatch _stopwatch;
-  late LatLng _initialCameraPosition;
   late GoogleMapController _mapController;
+  PolylinePoints polylinePoints = PolylinePoints();
+  late Polyline _polyline;
+
   bool myLocationEnabled = false;
 
   Future<void> _getCurrentLocation() async {
@@ -33,12 +35,16 @@ class _ActivityFinishedViewState extends State<ActivityFinishedView> {
     super.initState();
     _getCurrentLocation();
     _stopwatch = Stopwatch();
+    _polyline = Polyline(
+      polylineId: PolylineId("line"),
+      color: Colors.red,
+      width: 5,
+      points: widget.activity.points,
+    );
     Geolocator.getPositionStream().listen((position) {
       final LatLng latLng = LatLng(position.latitude, position.longitude);
       _mapController.animateCamera(CameraUpdate.newLatLng(latLng));
-    });
-    _initialCameraPosition =
-        const LatLng(11.019211, -74.850314); // Posición inicial del mapa
+    }); // Posición inicial del mapa
     _stopwatch.start();
   }
 
@@ -96,18 +102,18 @@ class _ActivityFinishedViewState extends State<ActivityFinishedView> {
             ),
             Row(
               children: [
-                Text(
-                  widget.activity.distance,
+                const Text(
+                  "Distancia",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style:  TextStyle(
                     fontSize: 30,
                   ),
                 ),
                 const Spacer(),
-                const Text(
-                  "0.00",
+                Text(
+                  widget.activity.distance,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
@@ -125,16 +131,13 @@ class _ActivityFinishedViewState extends State<ActivityFinishedView> {
               child: GoogleMap(
                 mapType: MapType.normal,
                 initialCameraPosition: CameraPosition(
-                  target: _initialCameraPosition,
+                  target: widget.activity.points.first,
                   zoom: 15,
                 ),
+                polylines: Set<Polyline>.from([_polyline]),
                 onMapCreated: (GoogleMapController controller) {
                   _mapController = controller;
-                  setState(() {
-                    myLocationEnabled = true;
-                  });
                 },
-                myLocationEnabled: myLocationEnabled,
               ),
             ),
             const SizedBox(
