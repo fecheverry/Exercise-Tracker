@@ -1,11 +1,46 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/activity_model.dart';
 import 'activity_history.dart';
 
-class ActivityFinishedView extends StatelessWidget {
+class ActivityFinishedView extends StatefulWidget {
   final Activity activity;
   const ActivityFinishedView({super.key, required this.activity});
+
+  @override
+  State<ActivityFinishedView> createState() => _ActivityFinishedViewState();
+}
+
+class _ActivityFinishedViewState extends State<ActivityFinishedView> {
+  late Stopwatch _stopwatch;
+  late LatLng _initialCameraPosition;
+  late GoogleMapController _mapController;
+  bool myLocationEnabled = false;
+
+  Future<void> _getCurrentLocation() async {
+    final Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    final LatLng latLng = LatLng(position.latitude, position.longitude);
+    _mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 15));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+    _stopwatch = Stopwatch();
+    Geolocator.getPositionStream().listen((position) {
+      final LatLng latLng = LatLng(position.latitude, position.longitude);
+      _mapController.animateCamera(CameraUpdate.newLatLng(latLng));
+    });
+    _initialCameraPosition =
+        const LatLng(11.019211, -74.850314); // Posición inicial del mapa
+    _stopwatch.start();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +79,7 @@ class ActivityFinishedView extends StatelessWidget {
                 const Spacer(),
                 // ignore: prefer_const_constructors
                 Text(
-                  activity.duration,
+                  widget.activity.duration,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 30,
@@ -62,7 +97,7 @@ class ActivityFinishedView extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  activity.distance,
+                  widget.activity.distance,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 30,
@@ -83,7 +118,27 @@ class ActivityFinishedView extends StatelessWidget {
               ],
             ),
             const SizedBox(
-              height: 60,
+              height: 30,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 3,
+              child: GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: CameraPosition(
+                  target: _initialCameraPosition,
+                  zoom: 15,
+                ),
+                onMapCreated: (GoogleMapController controller) {
+                  _mapController = controller;
+                  setState(() {
+                    myLocationEnabled = true;
+                  });
+                },
+                myLocationEnabled: myLocationEnabled,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -113,9 +168,9 @@ class ActivityFinishedView extends StatelessWidget {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: activity.segments.length,
+                itemCount: widget.activity.segments.length,
                 itemBuilder: (context, index) {
-                  final segmento = activity.segments[index];
+                  final segmento = widget.activity.segments[index];
                   return ListTile(
                     title: Text(segmento.segmentName),
                     subtitle: Column(

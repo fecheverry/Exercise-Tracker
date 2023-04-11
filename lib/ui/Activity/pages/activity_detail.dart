@@ -1,13 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../models/activity_model.dart';
 
-class ActivityDetailView extends StatelessWidget {
+class ActivityDetailView extends StatefulWidget {
   final Activity actividad;
 
   // ignore: empty_constructor_bodies
   ActivityDetailView({super.key, required this.actividad}) {}
+
+  @override
+  State<ActivityDetailView> createState() => _ActivityDetailViewState();
+}
+
+class _ActivityDetailViewState extends State<ActivityDetailView> {
+  late Stopwatch _stopwatch;
+  late LatLng _initialCameraPosition;
+  late GoogleMapController _mapController;
+  bool myLocationEnabled = false;
+
+  Future<void> _getCurrentLocation() async {
+    final Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    final LatLng latLng = LatLng(position.latitude, position.longitude);
+    _mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 15));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+    _stopwatch = Stopwatch();
+    Geolocator.getPositionStream().listen((position) {
+      final LatLng latLng = LatLng(position.latitude, position.longitude);
+      _mapController.animateCamera(CameraUpdate.newLatLng(latLng));
+    });
+    _initialCameraPosition =
+        const LatLng(11.019211, -74.850314); // Posición inicial del mapa
+    _stopwatch.start();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +56,7 @@ class ActivityDetailView extends StatelessWidget {
         ),
         // ignore: prefer_const_constructors
         title: Text(
-          actividad.type,
+          widget.actividad.type,
           style: const TextStyle(color: Colors.amber),
         ),
       ),
@@ -43,7 +76,7 @@ class ActivityDetailView extends StatelessWidget {
                   children: [
                     // ignore: prefer_const_constructors
                     Text(
-                      actividad.duration,
+                      widget.actividad.duration,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 24,
@@ -65,7 +98,7 @@ class ActivityDetailView extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      actividad.distance,
+                      widget.actividad.distance,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 24,
@@ -83,6 +116,29 @@ class ActivityDetailView extends StatelessWidget {
                 )
               ],
             ),
+            const SizedBox(
+              height: 30,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 3,
+              child: GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: CameraPosition(
+                  target: _initialCameraPosition,
+                  zoom: 15,
+                ),
+                onMapCreated: (GoogleMapController controller) {
+                  _mapController = controller;
+                  setState(() {
+                    myLocationEnabled = true;
+                  });
+                },
+                myLocationEnabled: myLocationEnabled,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -90,9 +146,6 @@ class ActivityDetailView extends StatelessWidget {
                   width: 90,
                   height: 1,
                   color: Colors.black,
-                ),
-                const SizedBox(
-                  height: 60,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -114,9 +167,9 @@ class ActivityDetailView extends StatelessWidget {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: actividad.segments.length,
+                itemCount: widget.actividad.segments.length,
                 itemBuilder: (context, index) {
-                  final segmento = actividad.segments[index];
+                  final segmento = widget.actividad.segments[index];
                   return ListTile(
                     title: Text(segmento.segmentName),
                     subtitle: Column(

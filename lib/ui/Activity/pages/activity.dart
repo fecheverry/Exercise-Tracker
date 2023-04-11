@@ -3,7 +3,6 @@ import 'package:exercise_tracker/ui/Activity/controllers/activity_controller.dar
 import 'package:exercise_tracker/ui/Activity/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 // ignore: must_be_immutable
@@ -24,30 +23,16 @@ class _ActivityViewState extends State<ActivityView> {
   final ActivityController _activityController = Get.find();
   late Stopwatch _stopwatch;
   late Timer _timer;
-  late LatLng _initialCameraPosition;
-  late GoogleMapController _mapController;
   bool _isRunning = true;
   bool myLocationEnabled = false;
-
-  Future<void> _getCurrentLocation() async {
-    final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    final LatLng latLng = LatLng(position.latitude, position.longitude);
-    _mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 15));
-  }
 
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
     _stopwatch = Stopwatch();
-    Geolocator.getPositionStream().listen((position) {
-      final LatLng latLng = LatLng(position.latitude, position.longitude);
-      _mapController.animateCamera(CameraUpdate.newLatLng(latLng));
-    });
+
     _timer = Timer.periodic(const Duration(milliseconds: 10), _updateTimer);
-    _initialCameraPosition =
-        const LatLng(11.019211, -74.850314); // Posición inicial del mapa
+
     _stopwatch.start();
   }
 
@@ -77,7 +62,7 @@ class _ActivityViewState extends State<ActivityView> {
     });
   }
 
-  void  _stopTimer() {
+  void _stopTimer() {
     _timer.cancel();
     _stopwatch.stop();
     _stopwatch.reset();
@@ -98,49 +83,46 @@ class _ActivityViewState extends State<ActivityView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-        title: const Text('Mapa'),
-      ),*/
       body: Column(
         children: [
-          const SizedBox(height: 40),
-          Text(
-            _formattedTime(_stopwatch.elapsed),
-            style: const TextStyle(fontSize: 65),
-          ),
-          const Text(
-            "Duracion",
-            style: TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            "0.00",
-            style: TextStyle(fontSize: 65),
-          ),
-          const Text(
-            "Distancia",
-            style: TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
           const Spacer(),
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 2,
-            child: GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition: CameraPosition(
-                target: _initialCameraPosition,
-                zoom: 15,
+          Card(
+            elevation: 5, // Altura de la sombra de la tarjeta
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              side: const BorderSide(color: Colors.amber, width: 2.0),
+            ), // Bordes curvos
+            color: Colors.white, // Color de la tarjeta
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const SizedBox(height: 40),
+                  Text(
+                    _formattedTime(_stopwatch.elapsed),
+                    style: const TextStyle(fontSize: 65, color: Colors.black),
+                  ),
+                  const Text(
+                    "Duracion",
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "0.00",
+                    style: TextStyle(fontSize: 65, color: Colors.black),
+                  ),
+                  const Text(
+                    "Distancia",
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 40),
+                ],
               ),
-              onMapCreated: (GoogleMapController controller) {
-                _mapController = controller;
-                setState(() {
-                  myLocationEnabled = true;
-                });
-              },
-              myLocationEnabled: myLocationEnabled,
             ),
           ),
+          const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -167,15 +149,15 @@ class _ActivityViewState extends State<ActivityView> {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 2 - 10,
                 child: ElevatedButton(
-                  onPressed: ()  {
-                   
+                  onPressed: () {
                     _activityController.addActivity(
                       _formattedTime(_stopwatch.elapsed),
                       "00.0",
                       DateTime.now().toString(),
                       widget.type,
                       widget.segments,
-                    );  _stopTimer();
+                    );
+                    _stopTimer();
                   },
                   child: const Text(
                     "FINALIZAR",

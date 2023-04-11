@@ -4,7 +4,6 @@ import 'package:exercise_tracker/ui/User/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'ui/my_app.dart';
-import 'package:integration_test/integration_test.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

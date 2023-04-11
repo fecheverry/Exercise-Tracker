@@ -1,11 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../models/segment_model.dart';
 
-class SegmentDetailView extends StatelessWidget {
+class SegmentDetailView extends StatefulWidget {
   final Segment segmento;
   SegmentDetailView({super.key, required this.segmento});
+
+  @override
+  State<SegmentDetailView> createState() => _SegmentDetailViewState();
+}
+
+class _SegmentDetailViewState extends State<SegmentDetailView> {
+  late Stopwatch _stopwatch;
+  late LatLng _initialCameraPosition;
+  late GoogleMapController _mapController;
+  bool myLocationEnabled = false;
+
+  Future<void> _getCurrentLocation() async {
+    final Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    final LatLng latLng = LatLng(position.latitude, position.longitude);
+    _mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 15));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+    _stopwatch = Stopwatch();
+    Geolocator.getPositionStream().listen((position) {
+      final LatLng latLng = LatLng(position.latitude, position.longitude);
+      _mapController.animateCamera(CameraUpdate.newLatLng(latLng));
+    });
+    _initialCameraPosition =
+        const LatLng(11.019211, -74.850314); // Posición inicial del mapa
+    _stopwatch.start();
+  }
 
   final List<Map<String, String>> _rankingData = [
     {"rank": "1", "name": "John Doe", "time": "2:45:12"},
@@ -39,7 +72,7 @@ class SegmentDetailView extends StatelessWidget {
         ),
         // ignore: prefer_const_constructors
         title: Text(
-          segmento.name,
+          widget.segmento.name,
           style: const TextStyle(color: Colors.amber),
         ),
       ),
@@ -97,7 +130,7 @@ class SegmentDetailView extends StatelessWidget {
                       ),
                       // ignore: prefer_const_constructors
                       Text(
-                        segmento.start,
+                        widget.segmento.start,
                         style: const TextStyle(fontSize: 24.0),
                       ),
                     ],
@@ -114,13 +147,36 @@ class SegmentDetailView extends StatelessWidget {
                       ),
                       // ignore: prefer_const_constructors
                       Text(
-                        segmento.end,
+                        widget.segmento.end,
                         style: const TextStyle(fontSize: 24.0),
                       ),
                     ],
                   ),
                 ],
               ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 3,
+              child: GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: CameraPosition(
+                  target: _initialCameraPosition,
+                  zoom: 15,
+                ),
+                onMapCreated: (GoogleMapController controller) {
+                  _mapController = controller;
+                  setState(() {
+                    myLocationEnabled = true;
+                  });
+                },
+                myLocationEnabled: myLocationEnabled,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
             ),
             const Padding(
               padding: EdgeInsets.all(16.0),
