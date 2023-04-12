@@ -6,6 +6,7 @@ import 'package:exercise_tracker/ui/User/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 
 class MockSegmentController extends GetxService
@@ -25,7 +26,7 @@ void main() {
         home: Scaffold(
       body: SegmentDetailView(
         segmento: Segment(
-            id: "1", idUser: "1", name: "NOMBRE", start: "INICIO", end: "FIN"),
+            id: "1", idUser: "1", name: "NOMBRE", start: "INICIO", end: "FIN", startCoordinate: const LatLng(0,0), endCoordinate: const LatLng(0,0)),
       ),
     )));
     await tester.pump();

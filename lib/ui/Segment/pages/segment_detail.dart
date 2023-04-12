@@ -1,5 +1,6 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -7,7 +8,7 @@ import '../models/segment_model.dart';
 
 class SegmentDetailView extends StatefulWidget {
   final Segment segmento;
-  SegmentDetailView({super.key, required this.segmento});
+  const SegmentDetailView({super.key, required this.segmento});
 
   @override
   State<SegmentDetailView> createState() => _SegmentDetailViewState();
@@ -15,29 +16,51 @@ class SegmentDetailView extends StatefulWidget {
 
 class _SegmentDetailViewState extends State<SegmentDetailView> {
   late Stopwatch _stopwatch;
-  late LatLng _initialCameraPosition;
   late GoogleMapController _mapController;
-  bool myLocationEnabled = false;
-
-  Future<void> _getCurrentLocation() async {
-    final Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    final LatLng latLng = LatLng(position.latitude, position.longitude);
-    _mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 15));
-  }
+  Set<Marker> _markers = {};
 
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    _getCoordinates();
     _stopwatch = Stopwatch();
-    Geolocator.getPositionStream().listen((position) {
-      final LatLng latLng = LatLng(position.latitude, position.longitude);
-      _mapController.animateCamera(CameraUpdate.newLatLng(latLng));
-    });
-    _initialCameraPosition =
-        const LatLng(11.019211, -74.850314); // Posición inicial del mapa
     _stopwatch.start();
+  }
+
+  void _addMarkers() async {
+    final bounds = LatLngBounds(
+      southwest: LatLng(
+        min(widget.segmento.startCoordinate.latitude,
+            widget.segmento.endCoordinate.latitude),
+        min(widget.segmento.startCoordinate.longitude,
+            widget.segmento.endCoordinate.longitude),
+      ),
+      northeast: LatLng(
+        max(widget.segmento.startCoordinate.latitude,
+            widget.segmento.endCoordinate.latitude),
+        max(widget.segmento.startCoordinate.longitude,
+            widget.segmento.endCoordinate.longitude),
+      ),
+    );
+    await _mapController.animateCamera(
+      CameraUpdate.newLatLngBounds(bounds, 50),
+    );
+  }
+
+  Future<void> _getCoordinates() async {
+    _markers = {
+      Marker(
+        markerId: const MarkerId('start'),
+        position: widget.segmento.startCoordinate,
+        infoWindow: InfoWindow(title: 'Inicio', snippet: widget.segmento.start),
+      ),
+      Marker(
+        markerId: const MarkerId('end'),
+        position: widget.segmento.endCoordinate,
+        infoWindow: InfoWindow(title: 'Fin', snippet: widget.segmento.end),
+      ),
+    };
+    _addMarkers();
   }
 
   final List<Map<String, String>> _rankingData = [
@@ -85,7 +108,7 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  const Row(
                     children: [
                       Column(
                         // ignore: prefer_const_literals_to_create_immutables
@@ -93,24 +116,24 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
                           // ignore: prefer_const_constructors
                           Text(
                             "00.00.00",
-                            style: const TextStyle(fontSize: 24.0),
+                            style: TextStyle(fontSize: 24.0),
                           ),
-                          const Text(
+                          Text(
                             'Mejor tiempo',
                             style: TextStyle(fontSize: 18.0),
                           ),
                         ],
                       ),
-                      const Spacer(),
+                      Spacer(),
                       Column(
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
                           // ignore: prefer_const_constructors
                           Text(
                             "00.00.00",
-                            style: const TextStyle(fontSize: 24.0),
+                            style: TextStyle(fontSize: 24.0),
                           ),
-                          const Text(
+                          Text(
                             'Tiempo promedio',
                             style: TextStyle(fontSize: 18.0),
                           ),
@@ -161,18 +184,14 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
             SizedBox(
               height: MediaQuery.of(context).size.height / 3,
               child: GoogleMap(
-                mapType: MapType.normal,
                 initialCameraPosition: CameraPosition(
-                  target: _initialCameraPosition,
-                  zoom: 15,
+                  target: widget.segmento.endCoordinate,
+                  zoom: 13.5,
                 ),
-                onMapCreated: (GoogleMapController controller) {
+                markers: _markers,
+                onMapCreated: (controller) {
                   _mapController = controller;
-                  setState(() {
-                    myLocationEnabled = true;
-                  });
                 },
-                myLocationEnabled: myLocationEnabled,
               ),
             ),
             const SizedBox(

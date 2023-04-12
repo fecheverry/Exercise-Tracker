@@ -5,6 +5,7 @@ import 'package:exercise_tracker/ui/User/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 
 class MockSegmentController extends GetxService
@@ -16,7 +17,9 @@ class MockSegmentController extends GetxService
         idUser: "2",
         name: "LA 59",
         start: "CRA 72 #88-61",
-        end: "CRA 41 #59-36")
+        end: "CRA 41 #59-36",
+        startCoordinate: const LatLng(0, 0),
+        endCoordinate: const LatLng(0, 0))
   ].obs;
 
   @override
@@ -26,13 +29,16 @@ class MockSegmentController extends GetxService
       List<Segment>.from(_segments.where((element) => element.idUser == "1"));
 
   @override
-  void addSegment(String name, String start, String end) {
+  void addSegment(String name, String start, String end, LatLng startCoordinate,
+      LatLng endCoordinate) {
     Segment segmentToAdd = Segment(
         id: (_segments.length + 1).toString(),
         idUser: "1",
         name: name,
         start: start,
-        end: end);
+        end: end,
+        startCoordinate: startCoordinate,
+        endCoordinate: endCoordinate);
     _segments.add(segmentToAdd);
   }
 
@@ -67,7 +73,7 @@ void main() {
     expect(find.byType(Card), findsOneWidget);
 
     //Se añade un nuevo segmento manualmente y posteriormente se valida que si se este mostrando en la lista de la vista
-    mockSegmentController.addSegment("NUEVO", "INICIO", "FIN");
+    mockSegmentController.addSegment("NUEVO", "INICIO", "FIN", const LatLng(0,0), const LatLng(0,0));
     await tester.pumpAndSettle();
     expect(find.byType(Card), findsNWidgets(2));
 
