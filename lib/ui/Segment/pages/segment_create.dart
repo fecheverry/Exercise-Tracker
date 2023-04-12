@@ -4,90 +4,77 @@ import 'package:exercise_tracker/ui/Segment/pages/segment_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SegmentCreationView extends StatefulWidget {
-  SegmentCreationView({super.key});
+  const SegmentCreationView({super.key});
 
   @override
   State<SegmentCreationView> createState() => _SegmentCreationViewState();
 }
 
 class _SegmentCreationViewState extends State<SegmentCreationView> {
-  SegmentController _segmentController = Get.find();
-
+  final SegmentController _segmentController = Get.find();
   final TextEditingController _segmentNameController = TextEditingController();
-
   final TextEditingController _startController = TextEditingController();
-
   final TextEditingController _endController = TextEditingController();
-
-  final polylinePoints = PolylinePoints();
-
-  Set<Marker> _markers = {};
+  final Set<Marker> _markers = <Marker>{};
 
   late LatLng _startCoordinate;
-
   late LatLng _endCoordinate;
+  late GoogleMapController _mapController;
 
-  void _getCoordinates() async {
-    setState(() async {
-      if (_segmentNameController.text.isNotEmpty &&
-          _startController.text.isNotEmpty &&
-          _endController.text.isNotEmpty) {
-        final startLocations = await locationFromAddress(
-            'Barranquilla, CO ${_startController.text}');
-        final endLocations = await locationFromAddress(
-            'Barranquilla, CO ${_endController.text}');
-        if (startLocations.isNotEmpty) {
+  void trazarruta() {
+    if (_segmentNameController.text.isNotEmpty &&
+        _startController.text.isNotEmpty &&
+        _endController.text.isNotEmpty) {
+      locationFromAddress('Barranquilla, CO ${_startController.text}')
+          .then((startLocation) {
+        locationFromAddress('Barranquilla, CO ${_endController.text}')
+            .then((endLocation) {
           _startCoordinate =
-              LatLng(startLocations[0].latitude, startLocations[0].longitude);
-        }
-        if (endLocations.isNotEmpty) {
+              LatLng(startLocation[0].latitude, startLocation[0].longitude);
           _endCoordinate =
-              LatLng(endLocations[0].latitude, endLocations[0].longitude);
-        }
-        _markers.clear();
-        _markers = {
-          Marker(
-            markerId: const MarkerId('start'),
+              LatLng(endLocation[0].latitude, endLocation[0].longitude);
+
+          Marker startMarker = Marker(
+            markerId: const MarkerId('Inicio'),
             position: _startCoordinate,
-            visible: true,
-            infoWindow:
-                InfoWindow(title: 'Inicio', snippet: _startController.text),
-          ),
-          Marker(
-            markerId: const MarkerId('end'),
+          );
+          Marker endMarker = Marker(
+            markerId: const MarkerId('Fin'),
             position: _endCoordinate,
-            visible: true,
-            infoWindow: InfoWindow(title: 'Fin', snippet: _endController.text),
-          ),
-        };
-        final bounds = LatLngBounds(
-          southwest: LatLng(
-            min(_startCoordinate.latitude, _endCoordinate.latitude),
-            min(_startCoordinate.longitude, _endCoordinate.longitude),
-          ),
-          northeast: LatLng(
-            max(_startCoordinate.latitude, _endCoordinate.latitude),
-            max(_startCoordinate.longitude, _endCoordinate.longitude),
-          ),
-        );
-        _mapController.animateCamera(
-          CameraUpdate.newLatLngBounds(bounds, 50),
-        );
-      }
-    });
+          );
+
+          setState(() {
+            _markers.clear();
+            _markers.add(startMarker);
+            _markers.add(endMarker);
+          });
+
+          final bounds = LatLngBounds(
+            southwest: LatLng(
+              min(_startCoordinate.latitude, _endCoordinate.latitude),
+              min(_startCoordinate.longitude, _endCoordinate.longitude),
+            ),
+            northeast: LatLng(
+              max(_startCoordinate.latitude, _endCoordinate.latitude),
+              max(_startCoordinate.longitude, _endCoordinate.longitude),
+            ),
+          );
+          _mapController.animateCamera(
+            CameraUpdate.newLatLngBounds(bounds, 50),
+          );
+        });
+      });
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    _getCoordinates(); // Agregar marcadores al inicio
   }
-
-  late GoogleMapController _mapController;
 
   @override
   Widget build(BuildContext context) {
@@ -139,8 +126,8 @@ class _SegmentCreationViewState extends State<SegmentCreationView> {
               height: MediaQuery.of(context).size.height / 3,
               child: GoogleMap(
                 initialCameraPosition: const CameraPosition(
-                  target: LatLng(11.019211, -74.850314),
-                  zoom: 15,
+                  target: LatLng(10.979085, -74.804974),
+                  zoom: 10,
                 ),
                 markers: _markers,
                 onMapCreated: (controller) {
@@ -152,11 +139,11 @@ class _SegmentCreationViewState extends State<SegmentCreationView> {
             Row(
               children: [
                 ElevatedButton(
-                  onPressed: () async {
+                  onPressed: () {
                     if (_segmentNameController.text.isNotEmpty &&
                         _startController.text.isNotEmpty &&
                         _endController.text.isNotEmpty) {
-                      _getCoordinates();
+                      trazarruta();
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

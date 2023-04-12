@@ -22,12 +22,28 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
   @override
   void initState() {
     super.initState();
-    _getCoordinates();
+    _addmarkers();
     _stopwatch = Stopwatch();
     _stopwatch.start();
   }
 
-  void _addMarkers() async {
+  Future<void> _addmarkers() async {
+    _markers = {
+      Marker(
+        markerId: const MarkerId('start'),
+        position: widget.segmento.startCoordinate,
+        infoWindow: InfoWindow(title: 'Inicio', snippet: widget.segmento.start),
+      ),
+      Marker(
+        markerId: const MarkerId('end'),
+        position: widget.segmento.endCoordinate,
+        infoWindow: InfoWindow(title: 'Fin', snippet: widget.segmento.end),
+      ),
+    };
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
     final bounds = LatLngBounds(
       southwest: LatLng(
         min(widget.segmento.startCoordinate.latitude,
@@ -42,25 +58,14 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
             widget.segmento.endCoordinate.longitude),
       ),
     );
-    await _mapController.animateCamera(
+    _mapController.animateCamera(
       CameraUpdate.newLatLngBounds(bounds, 50),
     );
-  }
-
-  Future<void> _getCoordinates() async {
-    _markers = {
-      Marker(
-        markerId: const MarkerId('start'),
-        position: widget.segmento.startCoordinate,
-        infoWindow: InfoWindow(title: 'Inicio', snippet: widget.segmento.start),
-      ),
-      Marker(
-        markerId: const MarkerId('end'),
-        position: widget.segmento.endCoordinate,
-        infoWindow: InfoWindow(title: 'Fin', snippet: widget.segmento.end),
-      ),
-    };
-    _addMarkers();
+    Future.delayed(Duration(milliseconds: 500), () {
+      _mapController.animateCamera(
+        CameraUpdate.newLatLngBounds(bounds, 50),
+      );
+    });
   }
 
   final List<Map<String, String>> _rankingData = [
@@ -184,14 +189,12 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
             SizedBox(
               height: MediaQuery.of(context).size.height / 3,
               child: GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: widget.segmento.endCoordinate,
-                  zoom: 13.5,
+                initialCameraPosition: const CameraPosition(
+                  target: LatLng(10.979085, -74.804974),
+                  zoom: 10,
                 ),
                 markers: _markers,
-                onMapCreated: (controller) {
-                  _mapController = controller;
-                },
+                onMapCreated: _onMapCreated,
               ),
             ),
             const SizedBox(

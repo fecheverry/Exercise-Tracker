@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -17,7 +19,6 @@ class ActivityDetailView extends StatefulWidget {
 
 class _ActivityDetailViewState extends State<ActivityDetailView> {
   late Stopwatch _stopwatch;
-  late LatLng _initialCameraPosition;
   late GoogleMapController _mapController;
   bool myLocationEnabled = false;
   PolylinePoints polylinePoints = PolylinePoints();
@@ -27,15 +28,45 @@ class _ActivityDetailViewState extends State<ActivityDetailView> {
   void initState() {
     super.initState();
     _polyline = Polyline(
-      polylineId: PolylineId("line"),
+      polylineId: const PolylineId("Ruta"),
       color: Colors.red,
       width: 5,
       points: widget.actividad.points,
     );
     _stopwatch = Stopwatch();
-    _initialCameraPosition =
-        const LatLng(11.019211, -74.850314); // Posición inicial del mapa
     _stopwatch.start();
+  }
+
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+    final bounds = LatLngBounds(
+      southwest: LatLng(
+        min(widget.actividad.points.first.latitude,
+            widget.actividad.points.last.latitude),
+        min(widget.actividad.points.first.longitude,
+            widget.actividad.points.last.longitude),
+      ),
+      northeast: LatLng(
+        max(widget.actividad.points.first.latitude,
+            widget.actividad.points.last.latitude),
+        max(widget.actividad.points.first.longitude,
+            widget.actividad.points.last.longitude),
+      ),
+    );
+    _mapController.animateCamera(
+      CameraUpdate.newLatLngBounds(bounds, 50),
+    );
+    Future.delayed(Duration(milliseconds: 500), () {
+      _mapController.animateCamera(
+        CameraUpdate.newLatLngBounds(bounds, 50),
+      );
+    });
   }
 
   @override
@@ -119,14 +150,12 @@ class _ActivityDetailViewState extends State<ActivityDetailView> {
               height: MediaQuery.of(context).size.height / 3,
               child: GoogleMap(
                 mapType: MapType.normal,
-                initialCameraPosition: CameraPosition(
-                  target: _initialCameraPosition,
-                  zoom: 15,
+                initialCameraPosition: const CameraPosition(
+                  target: LatLng(10.979085, -74.804974),
+                  zoom: 10,
                 ),
                 polylines: Set<Polyline>.from([_polyline]),
-                onMapCreated: (GoogleMapController controller) {
-                  _mapController = controller;
-                },
+                onMapCreated: _onMapCreated,
               ),
             ),
             const SizedBox(
