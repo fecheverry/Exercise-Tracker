@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:exercise_tracker/ui/Segment/controllers/segment_controller.dart';
 import 'package:exercise_tracker/ui/Segment/pages/segment_history.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
 
@@ -20,6 +21,8 @@ class _SegmentCreationViewState extends State<SegmentCreationView> {
   final TextEditingController _startController = TextEditingController();
   final TextEditingController _endController = TextEditingController();
   final Set<Marker> _markers = <Marker>{};
+
+  String api = "AIzaSyCBAAbxPf6EqElO7EcuWbmkmC-Stc7y_0w";
 
   late LatLng _startCoordinate;
   late LatLng _endCoordinate;

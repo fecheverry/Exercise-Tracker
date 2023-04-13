@@ -29,7 +29,6 @@ void main() {
               type: "TIPO",
               segments: [
             TimeSegment(
-                id: "01",
                 idSegment: "00",
                 time: "00:00:00",
                 segmentName: "LA 59")

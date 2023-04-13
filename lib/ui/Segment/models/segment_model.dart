@@ -8,6 +8,10 @@ class Segment {
   final String end;
   final LatLng startCoordinate;
   final LatLng endCoordinate;
+  bool ppi = false;
+  String horai = "";
+  String horaf = "";
+  String hora = "";
   Segment({
     required this.id,
     required this.idUser,
@@ -15,6 +19,6 @@ class Segment {
     required this.start,
     required this.end,
     required this.startCoordinate,
-    required this.endCoordinate
+    required this.endCoordinate,
   });
 }

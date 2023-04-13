@@ -23,8 +23,7 @@ class MockActivityController extends GetxService
   ].obs;
 
   @override
-  void addActivity(String duration, String distance, String date, String type,
-      List<TimeSegment> segments, List<LatLng> points) {
+  void addActivity(String duration, String distance, String date, String type,List<TimeSegment> segments, List<LatLng> points) {
     Activity activityToAdd = Activity(
         id: (_activities.length + 2).toString(),
         idUser: "1",

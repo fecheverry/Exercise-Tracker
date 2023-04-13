@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'package:exercise_tracker/ui/Activity/controllers/activity_controller.dart';
 import 'package:exercise_tracker/ui/Activity/models/activity_model.dart';
+import 'package:exercise_tracker/ui/Segment/controllers/segment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../Segment/models/segment_model.dart';
+
 // ignore: must_be_immutable
 class ActivityView extends StatefulWidget {
   final String type;
 
-  List<TimeSegment> segments = [
-    TimeSegment(
-        id: "01", idSegment: "00", time: "00:00:00", segmentName: "LA 59")
-  ];
   ActivityView({super.key, required this.type});
 
   @override
@@ -30,7 +29,9 @@ class _ActivityViewState extends State<ActivityView> {
   bool _isRunning = true;
   bool myLocationEnabled = false;
   List<LatLng> points = [];
+  List<TimeSegment> segments = [];
   StreamSubscription<Position>? _positionStreamSubscription;
+  final SegmentController _segmentController = Get.find();
 
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
@@ -40,6 +41,7 @@ class _ActivityViewState extends State<ActivityView> {
   @override
   void initState() {
     super.initState();
+    segmentsreset();
     _positionStreamSubscription =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position? position) {
@@ -49,6 +51,7 @@ class _ActivityViewState extends State<ActivityView> {
           points.add(latLng);
           if (points.length > 1) {
             _distence();
+            segmentos();
           }
         });
       }
@@ -56,6 +59,55 @@ class _ActivityViewState extends State<ActivityView> {
     _stopwatch = Stopwatch();
     _timer = Timer.periodic(const Duration(milliseconds: 10), _updateTimer);
     _stopwatch.start();
+  }
+
+  void segmentos() {
+    for (Segment seg in _segmentController.allSegments) {
+      if (Geolocator.distanceBetween(
+              points.last.latitude,
+              points.last.longitude,
+              seg.startCoordinate.latitude,
+              seg.startCoordinate.longitude) <=
+          15) {
+        seg.horai = _formattedTime(_stopwatch.elapsed);
+        seg.ppi = true;
+      }
+      if (seg.ppi &&
+          Geolocator.distanceBetween(
+                  points.last.latitude,
+                  points.last.longitude,
+                  seg.endCoordinate.latitude,
+                  seg.endCoordinate.longitude) <=
+              15) {
+        seg.horaf = _formattedTime(_stopwatch.elapsed);
+        seg.ppi = false;
+        seg.hora = calcularTiempoTranscurrido(seg.horai, seg.horaf);
+        segments.add(TimeSegment(
+            idSegment: seg.id, time: seg.hora, segmentName: seg.name));
+      }
+    }
+  }
+
+  String calcularTiempoTranscurrido(String horaInicio, String horaFin) {
+    // Convertir las horas de cadena a objetos DateTime
+    DateTime inicio = DateTime.parse('1970-01-01T$horaInicio');
+    DateTime fin = DateTime.parse('1970-01-01T$horaFin');
+
+    // Calcular la duración entre las dos horas
+    Duration duracion = fin.difference(inicio);
+
+    // Formatear la duración como una cadena en formato HH:mm:ss
+    String horas = duracion.inHours.toString().padLeft(2, '0');
+    String minutos = (duracion.inMinutes % 60).toString().padLeft(2, '0');
+    String segundos = (duracion.inSeconds % 60).toString().padLeft(2, '0');
+
+    return "$horas:$minutos:$segundos";
+  }
+
+  void segmentsreset() {
+    for (Segment seg in _segmentController.allSegments) {
+      seg.ppi = false;
+    }
   }
 
   void _distence() {
@@ -190,7 +242,7 @@ class _ActivityViewState extends State<ActivityView> {
                         distancefinal.toStringAsFixed(2),
                         DateTime.now().toString(),
                         widget.type,
-                        widget.segments,
+                        segments,
                         points);
                     _stopTimer();
                   },

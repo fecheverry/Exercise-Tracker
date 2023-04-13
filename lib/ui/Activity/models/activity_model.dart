@@ -21,10 +21,8 @@ class Activity {
 }
 
 class TimeSegment {
-  final String id;
   final String idSegment;
-    final String segmentName;
+  final String segmentName;
   final String time;
-
-  TimeSegment({required this.id, required this.idSegment, required this.time,required this.segmentName});
+  TimeSegment({required this.idSegment, required this.time,required this.segmentName});
 }
