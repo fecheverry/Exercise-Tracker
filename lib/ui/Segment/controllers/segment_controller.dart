@@ -55,7 +55,7 @@ class SegmentController extends GetxController {
           times.add(Time(
               hours: tiempo.hour,
               minutes: tiempo.minute,
-              seconds: tiempo.second));
+              seconds: tiempo.second.toInt()));
         }
       }
     }
