@@ -2,6 +2,7 @@ import 'package:exercise_tracker/ui/Activity/controllers/activity_controller.dar
 import 'package:exercise_tracker/ui/Activity/models/activity_model.dart';
 import 'package:exercise_tracker/ui/Segment/models/segment_model.dart';
 import 'package:exercise_tracker/ui/Segment/pages/segment_history.dart';
+import 'package:exercise_tracker/ui/User/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -44,7 +45,6 @@ class SegmentController extends GetxController {
     }
   }
 
-
   String averageTime(String id) {
     List<Time> times = [];
     final formatoTiempo = DateFormat("HH:mm:ss");
@@ -68,6 +68,44 @@ class SegmentController extends GetxController {
       }
       return (avarage / times.length).toString().substring(2);
     }
+  }
+
+  List<Map<String, String>> ranking(String id) {
+    late List<Map<String, String>> list = [];
+    Map<String, String> nameTimeMap = {};
+    for (Activity act in _activityController.allAcivities) {
+      for (TimeSegment i in act.segments) {
+        if (i.idSegment == id) {
+          for (User user in _userController.allUsers) {
+            if (user.id == act.idUser) {
+              String name = user.name;
+              String time = i.time;
+              if (nameTimeMap.containsKey(name)) {
+                String currentMinTime = nameTimeMap[name]!;
+                if (time.compareTo(currentMinTime) < 0) {
+                  nameTimeMap[name] = time;
+                }
+              } else {
+                nameTimeMap[name] = time;
+              }
+              //list.add({"rank": "", "name": user.name, "time": i.time});
+            }
+          }
+        }
+      }
+    }
+    nameTimeMap.forEach((name, time) {
+      list.add({"rank": "", "name": name, "time": time});
+    });
+    list.sort((a, b) {
+      String horaA = a["time"]!;
+      String horaB = b["time"]!;
+      return horaA.compareTo(horaB);
+    });
+    for (int i = 0; i < list.length; i++) {
+      list[i]["rank"] = (i + 1).toString();
+    }
+    return list;
   }
 
   get polyline => null;

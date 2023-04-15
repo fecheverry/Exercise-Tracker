@@ -7,25 +7,25 @@ import '../models/user_model.dart';
 class UserController extends GetxController {
   final List<User> _users = [
     User(
-        id: "1",
+        id: "2",
         name: "Fabian",
         lastName: "Vargas",
         email: "fabian@gmail.com",
         password: "fabian123"),
     User(
-        id: "2",
+        id: "3",
         name: "Freddy",
         lastName: "Guette",
         email: "freddy@gmail.com",
         password: "freddy123"),
     User(
-        id: "3",
+        id: "4",
         name: "Luis",
         lastName: "Caro",
         email: "luis@gmail.com",
         password: "luis123"),
     User(
-        id: "4",
+        id: "5",
         name: "Angel",
         lastName: "Rivera",
         email: "angel@gmail.com",
@@ -34,6 +34,7 @@ class UserController extends GetxController {
 
   Rx<User?> user = Rx<User?>(null);
   User? get userInfo => user.value;
+  List<User> get allUsers => _users;
 
   void login(String email, String password) {
     late User foundUser;

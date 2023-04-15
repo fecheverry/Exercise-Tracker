@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:exercise_tracker/ui/Activity/controllers/activity_controller.dart';
 import 'package:exercise_tracker/ui/Activity/models/activity_model.dart';
 import 'package:exercise_tracker/ui/Segment/controllers/segment_controller.dart';
 import 'package:flutter/material.dart';
@@ -25,12 +24,14 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
   late Set<TimeSegment> missegmentos;
   late String timeBetter;
   late String averagetime;
+  late List<Map<String, String>> ranking = [];
 
   @override
   void initState() {
     super.initState();
     timeBetter = mejortime(widget.segmento.id);
     averagetime = promediotime(widget.segmento.id);
+    ranking = rank(widget.segmento.id);
     _addmarkers();
     _stopwatch = Stopwatch();
     _stopwatch.start();
@@ -59,6 +60,10 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
     return _segmentController.timeBetter(id);
   }
 
+  List<Map<String, String>> rank(String id) {
+    return _segmentController.ranking(id);
+  }
+
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     final bounds = LatLngBounds(
@@ -78,14 +83,14 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
     _mapController.animateCamera(
       CameraUpdate.newLatLngBounds(bounds, 50),
     );
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       _mapController.animateCamera(
         CameraUpdate.newLatLngBounds(bounds, 50),
       );
     });
   }
 
-  final List<Map<String, String>> _rankingData = [
+  /*final List<Map<String, String>> _rankingData = [
     {"rank": "1", "name": "John Doe", "time": "2:45:12"},
     {"rank": "2", "name": "Jane Smith", "time": "3:01:45"},
     {"rank": "3", "name": "Bob Johnson", "time": "3:05:22"},
@@ -101,7 +106,7 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
     {"rank": "3", "name": "Bob Johnson", "time": "3:05:22"},
     {"rank": "4", "name": "Emily Brown", "time": "3:10:11"},
     {"rank": "5", "name": "Mike Wilson", "time": "3:15:00"},
-  ];
+  ];*/
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +235,7 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
                 DataColumn(label: Text('Nombre')),
                 DataColumn(label: Text('Tiempo')),
               ],
-              rows: _rankingData
+              rows: ranking
                   .map(
                     (data) => DataRow(
                       cells: [

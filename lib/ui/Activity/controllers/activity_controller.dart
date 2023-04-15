@@ -18,6 +18,7 @@ class ActivityController extends GetxController {
         points: [])
   ].obs;
 
+  List<Activity> get allAcivities => _activities;
   List<Activity> get listActivities => List<Activity>.from(_activities
       .where((element) => element.idUser == _userController.userInfo!.id));
 
