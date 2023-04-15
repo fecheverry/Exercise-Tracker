@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:exercise_tracker/ui/Activity/controllers/activity_controller.dart';
+import 'package:exercise_tracker/ui/Activity/models/activity_model.dart';
+import 'package:exercise_tracker/ui/Segment/controllers/segment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,13 +18,19 @@ class SegmentDetailView extends StatefulWidget {
 }
 
 class _SegmentDetailViewState extends State<SegmentDetailView> {
+  final SegmentController _segmentController = Get.find();
   late Stopwatch _stopwatch;
   late GoogleMapController _mapController;
   Set<Marker> _markers = {};
+  late Set<TimeSegment> missegmentos;
+  late String timeBetter;
+  late String averagetime;
 
   @override
   void initState() {
     super.initState();
+    timeBetter = mejortime(widget.segmento.id);
+    averagetime = promediotime(widget.segmento.id);
     _addmarkers();
     _stopwatch = Stopwatch();
     _stopwatch.start();
@@ -40,6 +49,14 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
         infoWindow: InfoWindow(title: 'Fin', snippet: widget.segmento.end),
       ),
     };
+  }
+
+  String promediotime(String id) {
+    return _segmentController.averageTime(id);
+  }
+
+  String mejortime(String id) {
+    return _segmentController.timeBetter(id);
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -113,32 +130,32 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
                       Column(
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
                           // ignore: prefer_const_constructors
                           Text(
-                            "00.00.00",
-                            style: TextStyle(fontSize: 24.0),
+                            timeBetter,
+                            style: const TextStyle(fontSize: 24.0),
                           ),
-                          Text(
+                          const Text(
                             'Mejor tiempo',
                             style: TextStyle(fontSize: 18.0),
                           ),
                         ],
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Column(
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
                           // ignore: prefer_const_constructors
                           Text(
-                            "00.00.00",
-                            style: TextStyle(fontSize: 24.0),
+                            averagetime,
+                            style: const TextStyle(fontSize: 24.0),
                           ),
-                          Text(
+                          const Text(
                             'Tiempo promedio',
                             style: TextStyle(fontSize: 18.0),
                           ),
