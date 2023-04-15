@@ -90,24 +90,6 @@ class _SegmentDetailViewState extends State<SegmentDetailView> {
     });
   }
 
-  /*final List<Map<String, String>> _rankingData = [
-    {"rank": "1", "name": "John Doe", "time": "2:45:12"},
-    {"rank": "2", "name": "Jane Smith", "time": "3:01:45"},
-    {"rank": "3", "name": "Bob Johnson", "time": "3:05:22"},
-    {"rank": "4", "name": "Emily Brown", "time": "3:10:11"},
-    {"rank": "5", "name": "Mike Wilson", "time": "3:15:00"},
-    {"rank": "1", "name": "John Doe", "time": "2:45:12"},
-    {"rank": "2", "name": "Jane Smith", "time": "3:01:45"},
-    {"rank": "3", "name": "Bob Johnson", "time": "3:05:22"},
-    {"rank": "4", "name": "Emily Brown", "time": "3:10:11"},
-    {"rank": "5", "name": "Mike Wilson", "time": "3:15:00"},
-    {"rank": "1", "name": "John Doe", "time": "2:45:12"},
-    {"rank": "2", "name": "Jane Smith", "time": "3:01:45"},
-    {"rank": "3", "name": "Bob Johnson", "time": "3:05:22"},
-    {"rank": "4", "name": "Emily Brown", "time": "3:10:11"},
-    {"rank": "5", "name": "Mike Wilson", "time": "3:15:00"},
-  ];*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

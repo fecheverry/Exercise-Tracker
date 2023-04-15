@@ -4,10 +4,8 @@ import 'package:exercise_tracker/ui/Segment/pages/segment_create.dart';
 import 'package:exercise_tracker/ui/Segment/pages/segment_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../models/segment_model.dart';
 
 import '../../Activity/pages/activity_history.dart';
-import '../../User/controllers/user_controller.dart';
 
 class SegmentHistoryView extends StatefulWidget {
   const SegmentHistoryView({super.key});
@@ -19,7 +17,6 @@ class SegmentHistoryView extends StatefulWidget {
 
 class _SegmentHistoryViewState extends State<SegmentHistoryView> {
   bool _myList = false;
-  final UserController _userController = Get.find();
   final SegmentController _segmentController = Get.find();
 
   void _changeList() {
@@ -164,7 +161,7 @@ class _SegmentHistoryViewState extends State<SegmentHistoryView> {
               key: const Key("add_button"),
               heroTag: "btn2",
               onPressed: () {
-                Get.to(() => SegmentCreationView());
+                Get.to(() => const SegmentCreationView());
               },
               child: const Icon(Icons.add),
             ),
