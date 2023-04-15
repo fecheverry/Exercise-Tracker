@@ -66,7 +66,7 @@ class SegmentController extends GetxController {
       for (Time i in times) {
         avarage += i;
       }
-      return (avarage / times.length).toString();
+      return (avarage / times.length).toString().substring(2);
     }
   }
 
