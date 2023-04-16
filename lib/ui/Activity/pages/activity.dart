@@ -13,7 +13,7 @@ import '../../Segment/models/segment_model.dart';
 class ActivityView extends StatefulWidget {
   final String type;
 
-  ActivityView({super.key, required this.type});
+  const ActivityView({super.key, required this.type});
 
   @override
   // ignore: library_private_types_in_public_api

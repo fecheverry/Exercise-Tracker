@@ -10,29 +10,31 @@ import 'package:mockito/mockito.dart';
 class MockSegmentController extends GetxService
     with Mock
     implements SegmentController {
-  final List<Segment> _segments = [
-    Segment(
-        id: "1",
-        idUser: "2",
-        name: "LA 59",
-        start: "CRA 72 #88-61",
-        end: "CRA 41 #59-36",
-        startCoordinate: const LatLng (0,0),
-        endCoordinate: const LatLng(0,0))
-  ].obs;
+final List<Segment> _segments = [
+  Segment(
+    id: "1",
+    idUser: "2",
+    name: "LA 59",
+    start: "CRA 72 #88-61",
+    end: "CRA 41 #59-36",
+    startCoordinate: const LatLng(0, 0),
+    endCoordinate: const LatLng(0, 0),
+  )
+].obs;
+
 
   @override
   List<Segment> get allSegments => _segments;
   @override
   List<Segment> get mySegments =>
-      List<Segment>.from(_segments.where((element) => element.idUser == "1"));
+      List<Segment>.from(_segments.where((element) => element.idUser == "2"));
 
   @override
-  void addSegment(String name, String start, String end, LatLng startCoordinate, LatLng endCoordinate) {
-    print("Hola");
+  void addSegment(String name, String start, String end, LatLng startCoordinate,
+      LatLng endCoordinate) {
     Segment segmentToAdd = Segment(
         id: (_segments.length + 1).toString(),
-        idUser: "1",
+        idUser: "2",
         name: name,
         start: start,
         end: end,
@@ -51,7 +53,7 @@ void main() {
     MockSegmentController mockSegmentController = MockSegmentController();
     // lo pasamos al DI de Get
     Get.put<SegmentController>(mockSegmentController);
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
         home: Scaffold(
       body: SegmentCreationView(),
     )));
@@ -68,16 +70,29 @@ void main() {
     await tester.pumpAndSettle(const Duration(seconds: 5));
 
     //Se escribe informacion en los textos y se oprime el boton de crear segmento y posteriormente se verifica que este elemento si se haya agregado a la lista
-    await tester.enterText(find.byType(TextField).at(0), 'Segmento 1');
-    await tester.enterText(find.byType(TextField).at(1), 'Inicio');
-    await tester.enterText(find.byType(TextField).at(2), 'Fin');
-    await tester.tap(find.widgetWithText(ElevatedButton, 'CREAR SEGMENTO'));
+    await tester.enterText(
+        find.byKey(
+          const Key("name_input"),
+        ),
+        'Segmento 1');
+    await tester.enterText(
+        find.byKey(
+          const Key("start_input"),
+        ),
+        'Calle 90a #70-05');
+    await tester.enterText(
+        find.byKey(
+          const Key("end_input"),
+        ),
+        'Calle 90a #70-110');
+    await tester.tap(find.byKey(const Key("rute_button")));
+    await tester.pumpAndSettle(const Duration(seconds: 100));
+    await tester.tap(find.byKey(const Key("create_button")));
     await tester.pumpAndSettle();
     expect(mockSegmentController.allSegments.length, 2);
     expect(mockSegmentController.allSegments[1].name, 'Segmento 1');
-    expect(mockSegmentController.allSegments[1].start, 'Inicio');
-    expect(mockSegmentController.allSegments[1].end, 'Fin');
-
+    expect(mockSegmentController.allSegments[1].start, 'Calle 90a #70-05');
+    expect(mockSegmentController.allSegments[1].end, 'Calle 90a #70-110');
     Get.delete<SegmentController>();
   });
 }

@@ -13,20 +13,21 @@ class MockActivityController extends GetxService
   final List<Activity> _activities = [
     Activity(
         id: "1",
-        idUser: "1",
+        idUser: "2",
         duration: "00:00:00",
         distance: "00.0",
-        date: "date",
+        date: "2022-04-16 16:30:00",
         type: "TROTE",
         segments: [],
         points: [])
   ].obs;
 
   @override
-  void addActivity(String duration, String distance, String date, String type,List<TimeSegment> segments, List<LatLng> points) {
+  void addActivity(String duration, String distance, String date, String type,
+      List<TimeSegment> segments, List<LatLng> points) {
     Activity activityToAdd = Activity(
         id: (_activities.length + 2).toString(),
-        idUser: "1",
+        idUser: "2",
         duration: duration,
         distance: distance,
         date: date,
@@ -65,7 +66,7 @@ void main() {
     expect(find.byType(Card), findsOneWidget);
 
     //Se agrega una actividad manualmente y se verifica que se este mostrando en la vista
-    mockActivityController.addActivity("01", "", "", "", [], []);
+    mockActivityController.addActivity("01", "", "2023-04-16 16:30:00", "", [], []);
     await tester.pumpAndSettle();
     expect(find.byType(Card), findsNWidgets(2));
 

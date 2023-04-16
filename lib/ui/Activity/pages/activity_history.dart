@@ -6,7 +6,7 @@ import 'activity_detail.dart';
 import 'home.dart';
 
 class ActivityHistoryView extends StatefulWidget {
-  const ActivityHistoryView({super.key});
+const ActivityHistoryView({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api

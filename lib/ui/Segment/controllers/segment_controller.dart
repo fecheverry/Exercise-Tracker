@@ -37,7 +37,7 @@ class SegmentController extends GetxController {
         }
       }
     }
-    if (myactinsegment.length == 0) {
+    if (myactinsegment.isEmpty) {
       return "00:00:00";
     } else {
       myactinsegment.sort((a, b) => a.time.compareTo(b.time));
@@ -59,7 +59,7 @@ class SegmentController extends GetxController {
         }
       }
     }
-    if (times.length == 0) {
+    if (times.isEmpty) {
       return "00:00:00";
     } else {
       Time avarage = Time(hours: 00, minutes: 00, seconds: 00);

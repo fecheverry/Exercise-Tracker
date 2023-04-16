@@ -1,5 +1,7 @@
 import 'package:exercise_tracker/ui/Activity/controllers/activity_controller.dart';
+import 'package:exercise_tracker/ui/Segment/controllers/segment_controller.dart';
 import 'package:exercise_tracker/ui/Activity/models/activity_model.dart';
+import 'package:exercise_tracker/ui/Segment/models/segment_model.dart';
 import 'package:exercise_tracker/ui/Activity/pages/activity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,10 +15,11 @@ class MockActivityController extends GetxService
   final List<Activity> _activities = [];
 
   @override
-  void addActivity(String duration, String distance, String date, String type,List<TimeSegment> segments ,List<LatLng> points) {
+  void addActivity(String duration, String distance, String date, String type,
+      List<TimeSegment> segments, List<LatLng> points) {
     Activity activityToAdd = Activity(
         id: (_activities.length + 1).toString(),
-        idUser: "1",
+        idUser: "2",
         duration: duration,
         distance: distance,
         date: date,
@@ -25,8 +28,18 @@ class MockActivityController extends GetxService
         points: points);
     _activities.add(activityToAdd);
   }
-@override
+
+  @override
   List<Activity> get listActivities => _activities;
+}
+
+class MockSegmentController extends GetxService
+    with Mock
+    implements SegmentController {
+  final List<Segment> _segments = [];
+
+  @override
+  List<Segment> get allSegments => _segments;
 }
 
 void main() {
@@ -36,7 +49,9 @@ void main() {
     MockActivityController mockActivityController = MockActivityController();
     // lo pasamos al DI de Get
     Get.put<ActivityController>(mockActivityController);
-    await tester.pumpWidget(MaterialApp(
+    MockSegmentController mockSegmentController = MockSegmentController();
+    Get.put<SegmentController>(mockSegmentController);
+    await tester.pumpWidget(const MaterialApp(
         home: Scaffold(
       body: ActivityView(
         type: "TROTE",
@@ -46,7 +61,7 @@ void main() {
 
     final finalizar = find.widgetWithText(SizedBox, 'FINALIZAR');
     final pausar = find.widgetWithText(SizedBox, 'PAUSAR');
-    
+
     //Se verifica que se esten mostrando los elementos que deben ir en esta vista
     expect(finalizar, findsOneWidget);
     expect(pausar, findsOneWidget);
@@ -63,6 +78,6 @@ void main() {
     await tester.pumpAndSettle();
     expect(mockActivityController.listActivities.length, 1);
 
-     Get.delete<ActivityController>();
+    Get.delete<ActivityController>();
   });
 }

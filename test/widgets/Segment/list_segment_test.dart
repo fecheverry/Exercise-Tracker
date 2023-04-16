@@ -14,7 +14,7 @@ class MockSegmentController extends GetxService
   final List<Segment> _segments = [
     Segment(
         id: "1",
-        idUser: "2",
+        idUser: "3",
         name: "LA 59",
         start: "CRA 72 #88-61",
         end: "CRA 41 #59-36",
@@ -26,14 +26,14 @@ class MockSegmentController extends GetxService
   List<Segment> get allSegments => _segments;
   @override
   List<Segment> get mySegments =>
-      List<Segment>.from(_segments.where((element) => element.idUser == "1"));
+      List<Segment>.from(_segments.where((element) => element.idUser == "2"));
 
   @override
   void addSegment(String name, String start, String end, LatLng startCoordinate,
       LatLng endCoordinate) {
     Segment segmentToAdd = Segment(
         id: (_segments.length + 1).toString(),
-        idUser: "1",
+        idUser: "2",
         name: name,
         start: start,
         end: end,
@@ -51,7 +51,6 @@ class MockSegmentController extends GetxService
 void main() {
   setUp(() {});
   testWidgets('List Segments Test', (WidgetTester tester) async {
-    Get.put(UserController());
     // agregamos la línea siguiente para registrar el controlador
     // aquí instanciamos el mock controller
     MockSegmentController mockSegmentController = MockSegmentController();

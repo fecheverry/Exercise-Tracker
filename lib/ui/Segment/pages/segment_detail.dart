@@ -10,7 +10,7 @@ import '../models/segment_model.dart';
 
 class SegmentDetailView extends StatefulWidget {
   final Segment segmento;
-  const SegmentDetailView({super.key, required this.segmento});
+  const SegmentDetailView({Key? key, required this.segmento}) : super(key: key);
 
   @override
   State<SegmentDetailView> createState() => _SegmentDetailViewState();

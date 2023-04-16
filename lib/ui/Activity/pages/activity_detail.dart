@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -39,7 +38,6 @@ class _ActivityDetailViewState extends State<ActivityDetailView> {
 
   @override
   void dispose() {
-    _mapController.dispose();
     super.dispose();
   }
 
@@ -62,7 +60,7 @@ class _ActivityDetailViewState extends State<ActivityDetailView> {
     _mapController.animateCamera(
       CameraUpdate.newLatLngBounds(bounds, 50),
     );
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       _mapController.animateCamera(
         CameraUpdate.newLatLngBounds(bounds, 50),
       );
@@ -154,7 +152,7 @@ class _ActivityDetailViewState extends State<ActivityDetailView> {
                   target: LatLng(10.979085, -74.804974),
                   zoom: 10,
                 ),
-                polylines: Set<Polyline>.from([_polyline]),
+                polylines: <Polyline>{_polyline},
                 onMapCreated: _onMapCreated,
               ),
             ),

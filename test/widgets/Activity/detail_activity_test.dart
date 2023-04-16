@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MockActivityController extends GetxService
     with Mock

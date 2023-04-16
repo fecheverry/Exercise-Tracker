@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'package:exercise_tracker/ui/Segment/controllers/segment_controller.dart';
-import 'package:exercise_tracker/ui/Segment/pages/segment_history.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart';
 
@@ -24,8 +22,8 @@ class _SegmentCreationViewState extends State<SegmentCreationView> {
 
   String api = "AIzaSyCBAAbxPf6EqElO7EcuWbmkmC-Stc7y_0w";
 
-  late LatLng _startCoordinate;
-  late LatLng _endCoordinate;
+  late LatLng _startCoordinate = const LatLng(0, 0);
+  late LatLng _endCoordinate = const LatLng(0, 0);
   late GoogleMapController _mapController;
 
   void trazarruta() {
@@ -142,6 +140,7 @@ class _SegmentCreationViewState extends State<SegmentCreationView> {
             Row(
               children: [
                 ElevatedButton(
+                  key: const Key("rute_button"),
                   onPressed: () {
                     if (_segmentNameController.text.isNotEmpty &&
                         _startController.text.isNotEmpty &&
